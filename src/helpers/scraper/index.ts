@@ -53,7 +53,7 @@ export const scrapeCollection = async () => {
     downloadPath: "./src/data",
   });
   await downloadButton.evaluate((b) => (b as HTMLAnchorElement).click());
-  await new Promise((r) => setTimeout(r, 1000));
+  await new Promise((r) => setTimeout(r, 1500));
 
   // Converting CSV to JSON
   let jsonArray: Figures = [];
