@@ -5,7 +5,9 @@ export const startBrowser = async () => {
   let browser: Browser;
   try {
     console.log("Opening the browser......");
-    browser = await puppeteer.launch({
+    const getter =
+      process.env.NODE_ENV === "production" ? puppeteer : chromium.puppeteer;
+    browser = await getter.launch({
       args: chromium.args,
       executablePath: await chromium.executablePath,
       headless: chromium.headless,
