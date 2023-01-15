@@ -17,18 +17,17 @@ const useUpcomingFigures = (): [FiguresData, () => void, boolean] => {
       updatedAt,
       figures: figures
         .filter((figure) => figure.Status === "Ordered")
-        .sort(function (a, b) {
+        .map((figure) => ({
+          ...figure,
           // Replace 00 from date string with 28 to avoid parsing errors
-          const correctedDateA = a["Release Date"].replace(
+          "Release Date": figure["Release Date"].replace(
             /(\d{4})-(\d{2})-00/,
             "$1-$2-28"
-          );
-          const correctedDateB = b["Release Date"].replace(
-            /(\d{4})-(\d{2})-00/,
-            "$1-$2-28"
-          );
-          const dateA = parse(correctedDateA, "yyyy-MM-dd", new Date());
-          const dateB = parse(correctedDateB, "yyyy-MM-dd", new Date());
+          ),
+        }))
+        .sort(function (a, b) {
+          const dateA = parse(a["Release Date"], "yyyy-MM-dd", new Date());
+          const dateB = parse(b["Release Date"], "yyyy-MM-dd", new Date());
           console.log(dateA, dateB);
           return dateA.getTime() - dateB.getTime();
         }),
