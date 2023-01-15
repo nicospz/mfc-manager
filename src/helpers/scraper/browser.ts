@@ -1,4 +1,4 @@
-import puppeteer, { Browser } from "puppeteer";
+import puppeteer, { Browser } from "puppeteer-core";
 
 export const startBrowser = async () => {
   let browser: Browser;

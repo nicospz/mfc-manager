@@ -1,4 +1,4 @@
-import puppeteer, { Browser, ElementHandle } from "puppeteer";
+import { ElementHandle } from "puppeteer-core";
 import fs from "fs";
 import csv from "csvtojson";
 import { startBrowser } from "@/helpers/scraper/browser";
