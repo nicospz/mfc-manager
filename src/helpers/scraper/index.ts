@@ -50,19 +50,20 @@ export const scrapeCollection = async () => {
   const client = await page.target().createCDPSession();
   await client.send("Page.setDownloadBehavior", {
     behavior: "allow",
-    downloadPath: "./src/data",
+    downloadPath: "/tmp/",
   });
   await downloadButton.evaluate((b) => (b as HTMLAnchorElement).click());
-  await new Promise((r) => setTimeout(r, 1500));
+  await new Promise((r) => setTimeout(r, 500));
 
   // Converting CSV to JSON
   let jsonArray: Figures = [];
   console.log("Converting CSV to JSON...");
-  const dir = fs.readdirSync("./src/data");
+  const dir = fs.readdirSync("/tmp/");
   const csvFile = dir.find((file) => file.includes(".csv"));
   if (csvFile) {
+    console.log("Found CSV file: ", csvFile);
     // convert csv to json
-    const csvFilePath = `./src/data/${csvFile}`;
+    const csvFilePath = `/tmp/${csvFile}`;
     jsonArray = await csv().fromFile(csvFilePath);
     //remove csv file
     fs.unlink(csvFilePath, (err) => {
@@ -70,15 +71,5 @@ export const scrapeCollection = async () => {
     });
   }
 
-  // Save JSON to file
-  const jsonContent = JSON.stringify(jsonArray);
-  fs.writeFile("./src/data/db.json", jsonContent, "utf8", function (err) {
-    if (err) {
-      console.log("An error occured while writing JSON Object to File.");
-      return console.log(err);
-    }
-
-    console.log("JSON file has been saved.");
-  });
   return jsonArray;
 };
