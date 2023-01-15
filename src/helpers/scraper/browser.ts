@@ -10,7 +10,8 @@ export const startBrowser = async () => {
     browser = await getter.launch({
       args: chromium.args,
       executablePath: await chromium.executablePath,
-      headless: chromium.headless,
+      headless:
+        process.env.NODE_ENV === "production" ? chromium.headless : true,
     });
     return browser;
   } catch (err) {

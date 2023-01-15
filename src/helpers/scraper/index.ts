@@ -3,7 +3,17 @@ import fs from "fs";
 import csv from "csvtojson";
 import { startBrowser } from "@/helpers/scraper/browser";
 
-export type Figures = any[];
+export type Figure = {
+  ID: string;
+  Title: string;
+  ["Release Date"]: string;
+  Shop: string;
+  Price: string;
+  ["Payment date"]: string;
+  Status: string;
+};
+
+export type Figures = Figure[];
 
 const SIGNIN_URL = "https://myfigurecollection.net/session/signin/";
 const COLLECTION_URL = "https://myfigurecollection.net/manager/collection/";
