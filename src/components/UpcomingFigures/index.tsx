@@ -37,7 +37,7 @@ const UpcomingFigures = () => {
   );
 
   return (
-    <div className="flex flex-col items-center justify-center w-full gap-2">
+    <div className="flex flex-col items-center justify-center w-full gap-2 px-5 py-4">
       <Button
         disabled={isLoading}
         className=""
