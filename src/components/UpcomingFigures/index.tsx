@@ -18,10 +18,10 @@ const UpcomingFigures = () => {
   const [currentMonth, setCurrentMonth] = React.useState(
     new Date().getMonth() + 1
   );
-  const [figureCollection, refreshFigureCollection, isLoading] =
+  const [figureCollection, refreshFigureCollection, isLoading, monthlySums] =
     useUpcomingFigures();
 
-  const filteredFiguresByDate = figureCollection?.figures.filter((figure) => {
+  const filteredFiguresByDate = figureCollection?.figures?.filter((figure) => {
     const figureDate = new Date(figure.releaseDate);
     // Check if the figure is in the current month
     return (
@@ -30,11 +30,23 @@ const UpcomingFigures = () => {
     );
   });
 
-  // Total price for the month
-  const priceForTheMonth = filteredFiguresByDate?.reduce(
-    (total, figure) => total + parseInt(figure.price),
-    0
-  );
+  let previousMonth = currentMonth - 1;
+  let previousYear: number;
+  if (previousMonth === 0) {
+    previousMonth = 12;
+    previousYear = currentYear - 1;
+  } else {
+    previousYear = currentYear;
+  }
+
+  let nextMonth = currentMonth + 1;
+  let nextYear: number;
+  if (nextMonth === 13) {
+    nextMonth = 1;
+    nextYear = currentYear + 1;
+  } else {
+    nextYear = currentYear;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center w-full gap-2 px-5 py-4">
@@ -49,13 +61,10 @@ const UpcomingFigures = () => {
       <div className="flex items-center gap-2">
         {/* Icon to decrement month */}
         <Button
+          disabled={monthlySums[previousYear] === undefined}
           onClick={() => {
-            if (currentMonth === 1) {
-              setCurrentMonth(12);
-              setCurrentYear(currentYear - 1);
-            } else {
-              setCurrentMonth(currentMonth - 1);
-            }
+            setCurrentMonth(previousMonth);
+            setCurrentYear(previousYear);
           }}
         >
           <FontAwesomeIcon icon={faAngleLeft} />
@@ -65,13 +74,10 @@ const UpcomingFigures = () => {
         </span>
         {/* Icon to increment month */}
         <Button
+          disabled={monthlySums[nextYear] === undefined}
           onClick={() => {
-            if (currentMonth === 12) {
-              setCurrentMonth(1);
-              setCurrentYear(currentYear + 1);
-            } else {
-              setCurrentMonth(currentMonth + 1);
-            }
+            setCurrentMonth(nextMonth);
+            setCurrentYear(nextYear);
           }}
         >
           <FontAwesomeIcon icon={faAngleRight} />
@@ -79,79 +85,24 @@ const UpcomingFigures = () => {
       </div>
       {/* Total price */}
       <div className="p-2 rounded-lg bg-slate-50">
-        {formatPrice(priceForTheMonth)}
+        {formatPrice(monthlySums[currentYear]?.[currentMonth])}
       </div>
       {/* Chart */}
-      <Chart
-        data={[
-          {
-            month: 1,
-            year: 2013,
-            price: 101502,
-          },
-          {
-            month: 2,
-            year: 2013,
-            price: 111786,
-          },
-          {
-            month: 3,
-            year: 2013,
-            price: 107880,
-          },
-          {
-            month: 4,
-            year: 2013,
-            price: 88180,
-          },
-          {
-            month: 5,
-            year: 2013,
-            price: 42200,
-          },
-          {
-            month: 6,
-            year: 2013,
-            price: 36770,
-          },
-          {
-            month: 7,
-            year: 2013,
-            price: 116190,
-          },
-          {
-            month: 8,
-            year: 2013,
-            price: 58120,
-          },
-          {
-            month: 9,
-            year: 2013,
-            price: 34200,
-          },
-          {
-            month: 10,
-            year: 2013,
-            price: 95060,
-          },
-          {
-            month: 11,
-            year: 2013,
-            price: 0,
-          },
-          {
-            month: 12,
-            year: 2013,
-            price: 96990,
-          },
-        ]}
-        currentMonth={currentMonth}
-        currentYear={currentYear}
-        onMonthClick={(monthData) => {
-          console.log(monthData);
-          return setCurrentMonth(monthData.month);
-        }}
-      />
+      {monthlySums[currentYear] && (
+        <Chart
+          data={Object.entries(monthlySums[currentYear]).map(
+            ([month, price]) => ({
+              month: parseInt(month),
+              price: price,
+            })
+          )}
+          currentMonth={currentMonth}
+          onMonthClick={(monthData) => {
+            console.log(monthData);
+            return setCurrentMonth(monthData.month);
+          }}
+        />
+      )}
       {/* Figure list */}
       <div className="grid gap-2 md:grid-cols-2">
         {filteredFiguresByDate &&

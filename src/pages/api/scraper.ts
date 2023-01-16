@@ -7,7 +7,7 @@ export type FigureType = {
   title: string;
   releaseDate: string;
   shop: string;
-  price: string;
+  price: number;
   paymentDate: string;
   status: string;
 };
@@ -33,6 +33,7 @@ export default async function handler(
           /(\d{4})-(\d{2})-00/,
           "$1-$2-28"
         ),
+        price: parseInt(figure.price),
       })) as FigureType[],
     updatedAt: new Date(),
   });

@@ -8,11 +8,10 @@ import {
   YAxis,
 } from "recharts";
 
-type MonthData = { year: number; month: number; price: number };
+type MonthData = { month: number; price: number };
 
 type ChartProps = {
   data: MonthData[];
-  currentYear: number;
   currentMonth: number;
   onMonthClick: (monthData: MonthData) => void;
 };
@@ -28,7 +27,7 @@ const Chart: React.FC<ChartProps> = ({ data, currentMonth, onMonthClick }) => {
             <Cell
               cursor="pointer"
               fill={entry.month === currentMonth ? "#82ca9d" : "#8884d8"}
-              key={`cell-${entry.year}-${entry.month}`}
+              key={`cell-${entry.month}`}
             />
           ))}
         </Bar>
