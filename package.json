@@ -11,6 +11,8 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
+    "@fortawesome/pro-light-svg-icons": "^6.2.1",
+    "@fortawesome/pro-regular-svg-icons": "^6.2.1",
     "@fortawesome/pro-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@next/font": "13.1.2",
@@ -19,6 +21,7 @@
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",
     "chrome-aws-lambda": "^6.0.0",
+    "classnames": "^2.3.2",
     "csvtojson": "^2.0.10",
     "date-fns": "^2.29.3",
     "eslint": "8.32.0",

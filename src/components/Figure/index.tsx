@@ -1,21 +1,34 @@
 import { formatPrice } from "@/helpers/format";
 import { FigureType } from "@/pages/api/scraper";
+import classNames from "classnames";
 import React from "react";
+import { faCalendar, faCreditCard } from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type FigureProps = {
+  className?: string;
   id: FigureType["id"];
   title: FigureType["title"];
   releaseDate: FigureType["releaseDate"];
   price: FigureType["price"];
 };
 
-const Figure: React.FC<FigureProps> = ({ id, title, releaseDate, price }) => {
+const Figure: React.FC<FigureProps> = ({
+  className,
+  id,
+  title,
+  releaseDate,
+  price,
+}) => {
   return (
     <a
       href={`https://myfigurecollection.net/item/${id}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-4 p-2 rounded-lg bg-slate-50"
+      className={classNames(
+        className,
+        "flex items-center gap-4 p-2 rounded-lg bg-slate-50"
+      )}
     >
       {/*  eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -24,8 +37,13 @@ const Figure: React.FC<FigureProps> = ({ id, title, releaseDate, price }) => {
       />
       <div className="flex flex-col">
         <span>{title}</span>
-        <span>{releaseDate}</span>
-        <span>{formatPrice(price)}</span>
+        <div className="flex gap-2">
+          <span className="flex items-center gap-1">
+            <FontAwesomeIcon icon={faCalendar} />
+            {releaseDate}
+          </span>
+          <span className="flex items-center">{formatPrice(price)}</span>
+        </div>
       </div>
     </a>
   );

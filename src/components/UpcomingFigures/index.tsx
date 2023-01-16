@@ -153,10 +153,10 @@ const UpcomingFigures = () => {
         }}
       />
       {/* Figure list */}
-      <div className="flex flex-col gap-2">
+      <div className="grid gap-2 md:grid-cols-2">
         {filteredFiguresByDate &&
           filteredFiguresByDate.map((figure) => (
-            <Figure key={figure.id} {...figure} />
+            <Figure key={figure.id} {...figure} className="w-full" />
           ))}
       </div>
     </div>
