@@ -10,8 +10,15 @@ const useUpcomingFigures = (): [FigureCollectionType, () => void, boolean] => {
 
   const refreshUpcomingFigures = async () => {
     setIsLoading(true);
-    const scraper = await fetch("/api/scraper");
-    const figureCollection = (await scraper.json()) as FigureCollectionType;
+    let figureCollection: FigureCollectionType;
+    try {
+      const scraper = await fetch("/api/scraper");
+      figureCollection = await scraper.json();
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+      return;
+    }
     const { figures, updatedAt } = figureCollection;
     setStoredValue({
       updatedAt,
@@ -24,7 +31,7 @@ const useUpcomingFigures = (): [FigureCollectionType, () => void, boolean] => {
           return dateA.getTime() - dateB.getTime();
         }),
     });
-    setIsLoading(true);
+    setIsLoading(false);
   };
 
   return [figuresData, refreshUpcomingFigures, isLoading];

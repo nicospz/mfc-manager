@@ -4,9 +4,9 @@
 
 html,
 body {
-  @apply bg-gray-50 dark:bg-gray-900 w-full h-full;
+  @apply w-full h-full bg-gray-50 dark:bg-gray-900;
 }
 
 #__next {
-  @apply flex flex-col h-screen text-gray-600 leading-normal text-base tracking-normal;
+  @apply flex flex-col h-screen p-2 text-base leading-normal tracking-normal text-gray-600;
 }

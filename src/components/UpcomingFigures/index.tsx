@@ -32,15 +32,15 @@ const UpcomingFigures = () => {
     <div className="flex flex-col items-center justify-center w-full gap-2">
       <button
         disabled={isLoading}
-        className="px-3 py-2 rounded-lg bg-slate-200"
+        className="px-3 py-2 rounded-lg bg-slate-50"
         onClick={refreshFigureCollection}
       >
         Refresh Figure Collection
       </button>
-      <div>
+      <div className="flex gap-2">
         {/* Icon to decrement month */}
         <button
-          className="px-3 py-2 rounded-lg bg-slate-200"
+          className="px-3 py-2 rounded-lg bg-slate-50"
           onClick={() => {
             if (currentMonth === 1) {
               setCurrentMonth(12);
@@ -52,12 +52,12 @@ const UpcomingFigures = () => {
         >
           &lt;
         </button>
-        <span className="px-3 py-2 rounded-lg bg-slate-200">
+        <span className="px-3 py-2 rounded-lg bg-slate-50">
           {currentYear}-{("0" + currentMonth).slice(-2)}
         </span>
         {/* Icon to increment month */}
         <button
-          className="px-3 py-2 rounded-lg bg-slate-200"
+          className="px-3 py-2 rounded-lg bg-slate-50"
           onClick={() => {
             if (currentMonth === 12) {
               setCurrentMonth(1);
@@ -70,13 +70,17 @@ const UpcomingFigures = () => {
           &gt;
         </button>
       </div>
-      <div>
+      {/* Total price */}
+      <div className="p-2 rounded-lg bg-slate-50">
+        {formatPrice(priceForTheMonth)}
+      </div>
+      {/* Figure list */}
+      <div className="flex flex-col gap-2">
         {filteredFiguresByDate &&
           filteredFiguresByDate.map((figure) => (
             <Figure key={figure.id} {...figure} />
           ))}
       </div>
-      <div>{formatPrice(priceForTheMonth)}</div>
     </div>
   );
 };

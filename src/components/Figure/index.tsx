@@ -9,11 +9,25 @@ type FigureProps = {
   price: FigureType["price"];
 };
 
-const Figure: React.FC<FigureProps> = ({ title, releaseDate, price }) => {
+const Figure: React.FC<FigureProps> = ({ id, title, releaseDate, price }) => {
   return (
-    <div>
-      {releaseDate} - {formatPrice(price)} - {title}
-    </div>
+    <a
+      href={`https://myfigurecollection.net/item/${id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-4 p-2 rounded-lg bg-slate-50"
+    >
+      {/*  eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        alt={title}
+        src={`https://static.myfigurecollection.net/upload/items/${id}.jpg`}
+      />
+      <div className="flex flex-col">
+        <span>{title}</span>
+        <span>{releaseDate}</span>
+        <span>{formatPrice(price)}</span>
+      </div>
+    </a>
   );
 };
 
