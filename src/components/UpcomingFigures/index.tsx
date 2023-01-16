@@ -9,6 +9,7 @@ import {
   faAngleLeft,
 } from "@fortawesome/pro-solid-svg-icons";
 import Button from "@/components/Button";
+import Chart from "@/components/UpcomingFigures/Chart";
 
 const UpcomingFigures = () => {
   const [currentYear, setCurrentYear] = React.useState(
@@ -80,6 +81,77 @@ const UpcomingFigures = () => {
       <div className="p-2 rounded-lg bg-slate-50">
         {formatPrice(priceForTheMonth)}
       </div>
+      {/* Chart */}
+      <Chart
+        data={[
+          {
+            month: 1,
+            year: 2013,
+            price: 101502,
+          },
+          {
+            month: 2,
+            year: 2013,
+            price: 111786,
+          },
+          {
+            month: 3,
+            year: 2013,
+            price: 107880,
+          },
+          {
+            month: 4,
+            year: 2013,
+            price: 88180,
+          },
+          {
+            month: 5,
+            year: 2013,
+            price: 42200,
+          },
+          {
+            month: 6,
+            year: 2013,
+            price: 36770,
+          },
+          {
+            month: 7,
+            year: 2013,
+            price: 116190,
+          },
+          {
+            month: 8,
+            year: 2013,
+            price: 58120,
+          },
+          {
+            month: 9,
+            year: 2013,
+            price: 34200,
+          },
+          {
+            month: 10,
+            year: 2013,
+            price: 95060,
+          },
+          {
+            month: 11,
+            year: 2013,
+            price: 0,
+          },
+          {
+            month: 12,
+            year: 2013,
+            price: 96990,
+          },
+        ]}
+        currentMonth={currentMonth}
+        currentYear={currentYear}
+        onMonthClick={(monthData) => {
+          console.log(monthData);
+          return setCurrentMonth(monthData.month);
+        }}
+      />
       {/* Figure list */}
       <div className="flex flex-col gap-2">
         {filteredFiguresByDate &&
