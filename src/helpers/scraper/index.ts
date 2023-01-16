@@ -2,18 +2,9 @@ import { ElementHandle } from "puppeteer-core";
 import fs from "fs";
 import csv from "csvtojson";
 import { startBrowser } from "@/helpers/scraper/browser";
+import { FigureType } from "@/pages/api/scraper";
 
-export type Figure = {
-  ID: string;
-  Title: string;
-  ["Release Date"]: string;
-  Shop: string;
-  Price: string;
-  ["Payment date"]: string;
-  Status: string;
-};
-
-export type Figures = Figure[];
+export type Figures = FigureType[];
 
 const SIGNIN_URL = "https://myfigurecollection.net/session/signin/";
 const COLLECTION_URL = "https://myfigurecollection.net/manager/collection/";
@@ -66,7 +57,7 @@ export const scrapeCollection = async () => {
   await new Promise((r) => setTimeout(r, 500));
 
   // Converting CSV to JSON
-  let jsonArray: Figures = [];
+  let jsonArray = [];
   console.log("Converting CSV to JSON...");
   const dir = fs.readdirSync("/tmp/");
   const csvFile = dir.find((file) => file.includes(".csv"));
