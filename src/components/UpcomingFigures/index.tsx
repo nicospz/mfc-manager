@@ -3,7 +3,12 @@ import { formatPrice } from "@/helpers/format";
 import useUpcomingFigures from "@/hooks/useUpcomingFigures";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faSpinner,
+  faAngleRight,
+  faAngleLeft,
+} from "@fortawesome/pro-solid-svg-icons";
+import Button from "@/components/Button";
 
 const UpcomingFigures = () => {
   const [currentYear, setCurrentYear] = React.useState(
@@ -32,18 +37,17 @@ const UpcomingFigures = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full gap-2">
-      <button
+      <Button
         disabled={isLoading}
-        className="flex items-center gap-2 px-3 py-2 transition-colors rounded-lg bg-slate-50 disabled:bg-slate-400 hover:bg-slate-200"
+        className=""
         onClick={refreshFigureCollection}
       >
         Refresh Figure Collection
         {isLoading ? <FontAwesomeIcon icon={faSpinner} spin /> : null}
-      </button>
-      <div className="flex gap-2">
+      </Button>
+      <div className="flex items-center gap-2">
         {/* Icon to decrement month */}
-        <button
-          className="px-3 py-2 rounded-lg bg-slate-50"
+        <Button
           onClick={() => {
             if (currentMonth === 1) {
               setCurrentMonth(12);
@@ -53,14 +57,13 @@ const UpcomingFigures = () => {
             }
           }}
         >
-          &lt;
-        </button>
-        <span className="px-3 py-2 rounded-lg bg-slate-50">
+          <FontAwesomeIcon icon={faAngleLeft} />
+        </Button>
+        <span className="flex items-center h-10 px-3 rounded-lg bg-slate-50">
           {currentYear}-{("0" + currentMonth).slice(-2)}
         </span>
         {/* Icon to increment month */}
-        <button
-          className="px-3 py-2 rounded-lg bg-slate-50"
+        <Button
           onClick={() => {
             if (currentMonth === 12) {
               setCurrentMonth(1);
@@ -70,8 +73,8 @@ const UpcomingFigures = () => {
             }
           }}
         >
-          &gt;
-        </button>
+          <FontAwesomeIcon icon={faAngleRight} />
+        </Button>
       </div>
       {/* Total price */}
       <div className="p-2 rounded-lg bg-slate-50">
