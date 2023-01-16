@@ -2,6 +2,8 @@ import Figure from "@/components/Figure";
 import { formatPrice } from "@/helpers/format";
 import useUpcomingFigures from "@/hooks/useUpcomingFigures";
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/pro-solid-svg-icons";
 
 const UpcomingFigures = () => {
   const [currentYear, setCurrentYear] = React.useState(
@@ -32,10 +34,11 @@ const UpcomingFigures = () => {
     <div className="flex flex-col items-center justify-center w-full gap-2">
       <button
         disabled={isLoading}
-        className="px-3 py-2 rounded-lg bg-slate-50"
+        className="flex items-center gap-2 px-3 py-2 transition-colors rounded-lg bg-slate-50 disabled:bg-slate-400 hover:bg-slate-200"
         onClick={refreshFigureCollection}
       >
         Refresh Figure Collection
+        {isLoading ? <FontAwesomeIcon icon={faSpinner} spin /> : null}
       </button>
       <div className="flex gap-2">
         {/* Icon to decrement month */}
