@@ -19,7 +19,7 @@ type ChartProps = {
 
 const Chart: React.FC<ChartProps> = ({ data, currentMonth, onMonthClick }) => {
   return (
-    <ResponsiveContainer width="100%" height={500}>
+    <ResponsiveContainer width="100%" height={250}>
       <BarChart width={150} height={40} data={data}>
         <XAxis dataKey="name" />
         <YAxis />
