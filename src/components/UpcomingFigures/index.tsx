@@ -84,7 +84,7 @@ const UpcomingFigures: React.FC<UpcomingFiguresProps> = ({
         </Button>
       </div>
       {/* Total price */}
-      <div className="p-2 rounded-lg bg-slate-50">
+      <div className="text-3xl text-slate-100">
         {formatPrice(monthlySums[currentYear]?.[currentMonth])}
       </div>
       {/* Chart */}
