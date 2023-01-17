@@ -10,18 +10,26 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import Button from "@/components/Button";
 import Chart from "@/components/UpcomingFigures/Chart";
+import { FigureCollectionType } from "@/pages/api/scraper";
 
-const UpcomingFigures = () => {
+type UpcomingFiguresProps = {
+  upcomingFiguresInitialData: FigureCollectionType;
+};
+
+const UpcomingFigures: React.FC<UpcomingFiguresProps> = ({
+  upcomingFiguresInitialData,
+}) => {
+  const { upcomingFigures, isLoading, monthlySums } = useUpcomingFigures(
+    upcomingFiguresInitialData
+  );
   const [currentYear, setCurrentYear] = React.useState(
     new Date().getFullYear()
   );
   const [currentMonth, setCurrentMonth] = React.useState(
     new Date().getMonth() + 1
   );
-  const [figureCollection, refreshFigureCollection, isLoading, monthlySums] =
-    useUpcomingFigures();
 
-  const filteredFiguresByDate = figureCollection?.figures?.filter((figure) => {
+  const filteredFiguresByDate = upcomingFigures?.figures?.filter((figure) => {
     const figureDate = new Date(figure.releaseDate);
     // Check if the figure is in the current month
     return (
@@ -50,14 +58,6 @@ const UpcomingFigures = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full gap-2 px-5 py-4">
-      <Button
-        disabled={isLoading}
-        className=""
-        onClick={refreshFigureCollection}
-      >
-        Refresh Figure Collection
-        {isLoading ? <FontAwesomeIcon icon={faSpinner} spin /> : null}
-      </Button>
       <div className="flex items-center gap-2">
         {/* Icon to decrement month */}
         <Button

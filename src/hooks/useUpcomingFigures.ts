@@ -1,43 +1,41 @@
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { FigureCollectionType } from "@/pages/api/scraper";
 import parse from "date-fns/parse";
-import { useState } from "react";
+import { IncomingMessage } from "http";
+import absoluteUrl from "next-absolute-url";
+import { QueryFunctionContext, useQuery } from "react-query";
 
-const useUpcomingFigures = (): [
-  FigureCollectionType,
-  () => void,
-  boolean,
-  {
-    [year: number]: {
-      [month: number]: number;
-    };
+export const getUpcomingFigures = async (req?: IncomingMessage) => {
+  let url = "/api/upcoming-figures";
+  if (req) {
+    const { origin } = absoluteUrl(req, req.headers.host);
+    url = `${origin}${url}`;
   }
-] => {
-  const [figuresData, setStoredValue] =
-    useLocalStorage<FigureCollectionType>("upcomingFigures");
-  const [isLoading, setIsLoading] = useState(false);
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+};
+
+const useUpcomingFigures = (initialData: FigureCollectionType) => {
+  const { data: upcomingFigures, isLoading } = useQuery<FigureCollectionType>({
+    queryKey: ["upcomingFigures"],
+    queryFn: () => getUpcomingFigures(),
+    initialData: initialData,
+  });
 
   const refreshUpcomingFigures = async () => {
-    setIsLoading(true);
     let figureCollection: FigureCollectionType;
     try {
       const scraper = await fetch("/api/scraper");
       figureCollection = await scraper.json();
     } catch (error) {
       console.error(error);
-      setIsLoading(false);
       return;
     }
     const { figures, updatedAt } = figureCollection;
-    setStoredValue({
-      updatedAt,
-      figures: figures.filter((figure) => figure.status === "Ordered"),
-    });
-    setIsLoading(false);
   };
   // calculate monthly sum of figure prices per year
   const monthlySums: { [year: number]: { [month: number]: number } } = {};
-  figuresData?.figures?.reduce((acc, figure) => {
+  upcomingFigures?.figures?.reduce((acc, figure) => {
     const date = parse(figure.releaseDate, "yyyy-MM-dd", new Date());
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
@@ -59,7 +57,11 @@ const useUpcomingFigures = (): [
     }
   });
 
-  return [figuresData, refreshUpcomingFigures, isLoading, monthlySums];
+  return {
+    upcomingFigures,
+    isLoading,
+    monthlySums,
+  };
 };
 
 export default useUpcomingFigures;

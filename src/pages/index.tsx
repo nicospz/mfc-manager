@@ -1,12 +1,28 @@
-import dynamic from "next/dynamic";
+import UpcomingFigures from "@/components/UpcomingFigures";
+import { getUpcomingFigures } from "@/hooks/useUpcomingFigures";
+import { FigureCollectionType } from "@/pages/api/scraper";
+import { GetServerSideProps, GetStaticProps } from "next";
 
-const ComponentWithNoSSR = dynamic(
-  () => import("@/components/UpcomingFigures"),
-  {
-    ssr: false,
-  }
-);
+type UpcomingFiguresPageProps = {
+  upcomingFiguresInitialData: FigureCollectionType;
+};
 
-export default function Home() {
-  return <ComponentWithNoSSR />;
-}
+const UpcomingFiguresPage: React.FC<UpcomingFiguresPageProps> = ({
+  upcomingFiguresInitialData,
+}) => {
+  return (
+    <UpcomingFigures upcomingFiguresInitialData={upcomingFiguresInitialData} />
+  );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const upcomingFiguresInitialData = await getUpcomingFigures(context.req);
+
+  return {
+    props: {
+      upcomingFiguresInitialData,
+    },
+  };
+};
+
+export default UpcomingFiguresPage;
