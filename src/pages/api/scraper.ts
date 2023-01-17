@@ -1,8 +1,6 @@
 import { Figures, scrapeCollection } from "@/helpers/scraper";
 import type { NextApiRequest, NextApiResponse } from "next";
-import _ from "lodash";
 import { s3 } from "@/helpers/s3";
-import parse from "date-fns/parse";
 
 export type FigureType = {
   id: string;
@@ -26,21 +24,7 @@ export default async function handler(
   // Get data from your database
   const figures = await scrapeCollection();
   const json = {
-    figures: figures
-      .map((figure) => _.mapKeys(figure, (v, k) => _.camelCase(k)))
-      .map((figure) => ({
-        ...figure,
-        // Replace 00 from date string with 28 to avoid parsing errors
-        releaseDate: figure.releaseDate
-          .replace(/(\d{4})-(\d{2})-00/, "$1-$2-28")
-          .sort(function (a, b) {
-            const dateA = parse(a.releaseDate, "yyyy-MM-dd", new Date());
-            const dateB = parse(b.releaseDate, "yyyy-MM-dd", new Date());
-            console.log(dateA, dateB);
-            return dateA.getTime() - dateB.getTime();
-          }),
-        price: parseInt(figure.price),
-      })) as FigureType[],
+    figures,
     updatedAt: new Date(),
   };
 

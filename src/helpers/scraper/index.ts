@@ -2,7 +2,7 @@ import { ElementHandle } from "puppeteer-core";
 import fs from "fs";
 import csv from "csvtojson";
 import { startBrowser } from "@/helpers/scraper/browser";
-import { FigureType } from "@/pages/api/scraper";
+import { FigureCollectionType, FigureType } from "@/pages/api/scraper";
 
 export type Figures = FigureType[];
 
@@ -72,5 +72,26 @@ export const scrapeCollection = async () => {
     });
   }
 
-  return jsonArray;
+  return (
+    jsonArray
+      .map(
+        (figure) =>
+          ({
+            id: figure.ID,
+            title: figure.Title,
+            // replace 00 for 28 to avoid date-fns error
+            releaseDate: figure["Release Date"].replace("00", "28"),
+            shop: figure.Shop,
+            price: parseInt(figure.Price),
+            paymentDate: figure["Payment Date"],
+            status: figure.Status,
+          } as FigureType)
+      )
+      // order by release date
+      .sort((a, b) => {
+        const aDate = new Date(a.releaseDate);
+        const bDate = new Date(b.releaseDate);
+        return aDate.getTime() - bDate.getTime();
+      })
+  );
 };
