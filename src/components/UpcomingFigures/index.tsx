@@ -1,25 +1,21 @@
-import Figure from "@/components/Figure";
-import { formatPrice } from "@/helpers/format";
-import useUpcomingFigures from "@/hooks/useUpcomingFigures";
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSpinner,
-  faAngleRight,
-  faAngleLeft,
-} from "@fortawesome/pro-solid-svg-icons";
-import Button from "@/components/Button";
-import Chart from "@/components/UpcomingFigures/Chart";
-import { FigureCollectionType } from "@/pages/api/scraper";
+import Figure from '@/components/Figure';
+import { formatPrice } from '@/helpers/format';
+import useUpcomingFigures from '@/hooks/useUpcomingFigures';
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleRight, faAngleLeft } from '@fortawesome/pro-solid-svg-icons';
+import Button from '@/components/Button';
+import Chart from '@/components/UpcomingFigures/Chart';
+import { FigureCollectionType } from '@/pages/api/scraper';
 
-type UpcomingFiguresProps = {
-  upcomingFiguresInitialData: FigureCollectionType;
-};
+interface UpcomingFiguresProps {
+  upcomingFiguresInitialData: FigureCollectionType
+}
 
 const UpcomingFigures: React.FC<UpcomingFiguresProps> = ({
-  upcomingFiguresInitialData,
+  upcomingFiguresInitialData
 }) => {
-  const { upcomingFigures, isLoading, monthlySums } = useUpcomingFigures(
+  const { upcomingFigures, monthlySums } = useUpcomingFigures(
     upcomingFiguresInitialData
   );
   const [currentYear, setCurrentYear] = React.useState(
@@ -56,6 +52,9 @@ const UpcomingFigures: React.FC<UpcomingFiguresProps> = ({
     nextYear = currentYear;
   }
 
+  const currentYearSums = monthlySums?.[currentYear];
+  const currentMonthSum = currentYearSums?.[currentMonth];
+
   return (
     <div className="flex flex-col items-center justify-center w-full gap-2 px-5 py-4">
       <div className="flex items-center gap-2">
@@ -70,7 +69,7 @@ const UpcomingFigures: React.FC<UpcomingFiguresProps> = ({
           <FontAwesomeIcon icon={faAngleLeft} />
         </Button>
         <span className="flex items-center h-10 px-3 rounded-lg bg-slate-50">
-          {currentYear}-{("0" + currentMonth).slice(-2)}
+          {currentYear}-{(`0${currentMonth}`).slice(-2)}
         </span>
         {/* Icon to increment month */}
         <Button
@@ -84,31 +83,30 @@ const UpcomingFigures: React.FC<UpcomingFiguresProps> = ({
         </Button>
       </div>
       {/* Total price */}
+      {currentMonthSum &&
       <div className="text-3xl text-slate-100">
-        {formatPrice(monthlySums[currentYear]?.[currentMonth])}
-      </div>
+        {formatPrice(currentMonthSum)}
+      </div>}
       {/* Chart */}
-      {monthlySums[currentYear] && (
+      {!!currentYearSums && (
         <Chart
-          data={Object.entries(monthlySums[currentYear]).map(
+          data={Object.entries(currentYearSums).map(
             ([month, price]) => ({
               month: parseInt(month),
-              price: price,
+              price
             })
           )}
           currentMonth={currentMonth}
           onMonthClick={(monthData) => {
-            console.log(monthData);
-            return setCurrentMonth(monthData.month);
+            setCurrentMonth(monthData.month);
           }}
         />
       )}
       {/* Figure list */}
       <div className="grid gap-2 md:grid-cols-2">
-        {filteredFiguresByDate &&
-          filteredFiguresByDate.map((figure) => (
+        {filteredFiguresByDate?.map((figure) => (
             <Figure key={figure.id} {...figure} className="w-full" />
-          ))}
+        ))}
       </div>
     </div>
   );

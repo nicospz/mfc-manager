@@ -1,14 +1,14 @@
-import UpcomingFigures from "@/components/UpcomingFigures";
-import { getUpcomingFigures } from "@/hooks/useUpcomingFigures";
-import { FigureCollectionType } from "@/pages/api/scraper";
-import { GetServerSideProps, GetStaticProps } from "next";
+import UpcomingFigures from '@/components/UpcomingFigures';
+import { getUpcomingFigures } from '@/hooks/useUpcomingFigures';
+import { FigureCollectionType } from '@/pages/api/scraper';
+import { GetServerSideProps } from 'next';
 
-type UpcomingFiguresPageProps = {
-  upcomingFiguresInitialData: FigureCollectionType;
-};
+interface UpcomingFiguresPageProps {
+  upcomingFiguresInitialData: FigureCollectionType
+}
 
 const UpcomingFiguresPage: React.FC<UpcomingFiguresPageProps> = ({
-  upcomingFiguresInitialData,
+  upcomingFiguresInitialData
 }) => {
   return (
     <UpcomingFigures upcomingFiguresInitialData={upcomingFiguresInitialData} />
@@ -20,8 +20,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      upcomingFiguresInitialData,
-    },
+      upcomingFiguresInitialData
+    }
   };
 };
 

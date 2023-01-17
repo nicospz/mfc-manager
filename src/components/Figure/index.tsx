@@ -1,24 +1,24 @@
-import { formatPrice } from "@/helpers/format";
-import { FigureType } from "@/pages/api/scraper";
-import classNames from "classnames";
-import React from "react";
-import { faCalendar, faCreditCard } from "@fortawesome/pro-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { formatPrice } from '@/helpers/format';
+import { FigureType } from '@/pages/api/scraper';
+import classNames from 'classnames';
+import React from 'react';
+import { faCalendar } from '@fortawesome/pro-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-type FigureProps = {
-  className?: string;
-  id: FigureType["id"];
-  title: FigureType["title"];
-  releaseDate: FigureType["releaseDate"];
-  price: FigureType["price"];
-};
+interface FigureProps {
+  className?: string
+  id: FigureType['id']
+  title: FigureType['title']
+  releaseDate: FigureType['releaseDate']
+  price: FigureType['price']
+}
 
 const Figure: React.FC<FigureProps> = ({
   className,
   id,
   title,
   releaseDate,
-  price,
+  price
 }) => {
   return (
     <a
@@ -27,10 +27,9 @@ const Figure: React.FC<FigureProps> = ({
       rel="noopener noreferrer"
       className={classNames(
         className,
-        "flex items-center gap-4 p-2 rounded-lg bg-slate-50"
+        'flex items-center gap-4 p-2 rounded-lg bg-slate-50'
       )}
     >
-      {/*  eslint-disable-next-line @next/next/no-img-element */}
       <img
         alt={title}
         src={`https://static.myfigurecollection.net/upload/items/${id}.jpg`}

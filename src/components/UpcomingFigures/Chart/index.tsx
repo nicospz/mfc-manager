@@ -1,20 +1,20 @@
-import React, { PureComponent } from "react";
+import React from 'react';
 import {
   BarChart,
   Bar,
   Cell,
   ResponsiveContainer,
   XAxis,
-  YAxis,
-} from "recharts";
+  YAxis
+} from 'recharts';
 
-type MonthData = { month: number; price: number };
+interface MonthData { month: number, price: number }
 
-type ChartProps = {
-  data: MonthData[];
-  currentMonth: number;
-  onMonthClick: (monthData: MonthData) => void;
-};
+interface ChartProps {
+  data: MonthData[]
+  currentMonth: number
+  onMonthClick: (monthData: MonthData) => void
+}
 
 const Chart: React.FC<ChartProps> = ({ data, currentMonth, onMonthClick }) => {
   return (
@@ -26,7 +26,7 @@ const Chart: React.FC<ChartProps> = ({ data, currentMonth, onMonthClick }) => {
           {data.map((entry) => (
             <Cell
               cursor="pointer"
-              fill={entry.month === currentMonth ? "#82ca9d" : "#8884d8"}
+              fill={entry.month === currentMonth ? '#82ca9d' : '#8884d8'}
               key={`cell-${entry.month}`}
             />
           ))}
