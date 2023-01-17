@@ -31,14 +31,7 @@ const useUpcomingFigures = (): [
     const { figures, updatedAt } = figureCollection;
     setStoredValue({
       updatedAt,
-      figures: figures
-        .filter((figure) => figure.status === "Ordered")
-        .sort(function (a, b) {
-          const dateA = parse(a.releaseDate, "yyyy-MM-dd", new Date());
-          const dateB = parse(b.releaseDate, "yyyy-MM-dd", new Date());
-          console.log(dateA, dateB);
-          return dateA.getTime() - dateB.getTime();
-        }),
+      figures: figures.filter((figure) => figure.status === "Ordered"),
     });
     setIsLoading(false);
   };
