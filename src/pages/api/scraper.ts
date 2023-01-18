@@ -25,6 +25,7 @@ export default async function handler (
     try {
       const { authorization } = req.headers;
 
+      console.log('authorization', authorization);
       if (authorization === `Bearer ${process.env.API_SECRET_KEY as string}` || process.env.NODE_ENV === 'development') {
         // Get data from your database
         const figures = await scrapeCollection();
