@@ -1,9 +1,7 @@
-import UpcomingFigures from '@/components/UpcomingFigures';
+import UpcomingFigures from "@/components/UpcomingFigures";
 
 const UpcomingFiguresPage: React.FC = () => {
-  return (
-    <UpcomingFigures />
-  );
+  return <UpcomingFigures />;
 };
 
 export default UpcomingFiguresPage;

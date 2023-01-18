@@ -1,11 +1,11 @@
-import parse from 'date-fns/parse';
-import absoluteUrl from 'next-absolute-url';
-import { useQuery } from 'react-query';
-import { IncomingMessage } from 'http';
-import { FigureCollectionType } from '@/pages/api/scraper';
+import parse from "date-fns/parse";
+import absoluteUrl from "next-absolute-url";
+import { useQuery } from "react-query";
+import { IncomingMessage } from "http";
+import { FigureCollectionType } from "@/pages/api/scraper";
 
 export const getUpcomingFigures = async (req?: IncomingMessage) => {
-  let url = '/api/upcoming-figures';
+  let url = "/api/upcoming-figures";
   if (req != null) {
     const { origin } = absoluteUrl(req, req.headers.host);
     url = `${origin}${url}`;
@@ -17,14 +17,14 @@ export const getUpcomingFigures = async (req?: IncomingMessage) => {
 
 const useUpcomingFigures = () => {
   const { data: upcomingFigures, isLoading } = useQuery<FigureCollectionType>({
-    queryKey: ['upcomingFigures'],
-    queryFn: async () => await getUpcomingFigures()
+    queryKey: ["upcomingFigures"],
+    queryFn: async () => await getUpcomingFigures(),
   });
 
   // calculate monthly sum of figure prices per year
   const monthlySums: Partial<Record<number, Record<number, number>>> = {};
   upcomingFigures?.figures?.reduce((acc, figure) => {
-    const date = parse(figure.releaseDate, 'yyyy-MM-dd', new Date());
+    const date = parse(figure.releaseDate, "yyyy-MM-dd", new Date());
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const accYear = acc[year] ?? {};
@@ -49,7 +49,7 @@ const useUpcomingFigures = () => {
   return {
     upcomingFigures,
     isLoading,
-    monthlySums
+    monthlySums,
   };
 };
 

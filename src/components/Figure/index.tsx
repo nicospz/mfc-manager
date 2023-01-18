@@ -1,16 +1,16 @@
-import classNames from 'classnames';
-import React from 'react';
-import { faCalendar } from '@fortawesome/pro-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FigureType } from '@/pages/api/scraper';
-import { formatPrice } from '@/helpers/format';
+import classNames from "classnames";
+import React from "react";
+import { faCalendar } from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FigureType } from "@/pages/api/scraper";
+import { formatPrice } from "@/helpers/format";
 
 interface FigureProps {
   className?: string;
-  id: FigureType['id'];
-  title: FigureType['title'];
-  releaseDate: FigureType['releaseDate'];
-  price: FigureType['price'];
+  id: FigureType["id"];
+  title: FigureType["title"];
+  releaseDate: FigureType["releaseDate"];
+  price: FigureType["price"];
 }
 
 const Figure: React.FC<FigureProps> = ({
@@ -18,7 +18,7 @@ const Figure: React.FC<FigureProps> = ({
   id,
   title,
   releaseDate,
-  price
+  price,
 }) => {
   return (
     <a
@@ -27,7 +27,7 @@ const Figure: React.FC<FigureProps> = ({
       rel="noopener noreferrer"
       className={classNames(
         className,
-        'flex items-center gap-4 p-2 rounded-lg bg-slate-50'
+        "flex items-center gap-4 p-2 rounded-lg bg-slate-50"
       )}
     >
       <img

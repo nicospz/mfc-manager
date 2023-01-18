@@ -1,14 +1,17 @@
-import React from 'react';
+import React from "react";
 import {
   BarChart,
   Bar,
   Cell,
   ResponsiveContainer,
   XAxis,
-  YAxis
-} from 'recharts';
+  YAxis,
+} from "recharts";
 
-interface MonthData { month: number; price: number }
+interface MonthData {
+  month: number;
+  price: number;
+}
 
 interface ChartProps {
   data: MonthData[];
@@ -26,7 +29,7 @@ const Chart: React.FC<ChartProps> = ({ data, currentMonth, onMonthClick }) => {
           {data.map((entry) => (
             <Cell
               cursor="pointer"
-              fill={entry.month === currentMonth ? '#82ca9d' : '#8884d8'}
+              fill={entry.month === currentMonth ? "#82ca9d" : "#8884d8"}
               key={`cell-${entry.month}`}
             />
           ))}
