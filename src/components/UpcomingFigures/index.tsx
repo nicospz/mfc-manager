@@ -84,7 +84,7 @@ const UpcomingFigures: React.FC<UpcomingFiguresProps> = ({
         </Button>
       </div>
       {/* Total price */}
-      {currentMonthSum &&
+      {currentMonthSum !== undefined &&
       <div className="text-3xl text-slate-100">
         {formatPrice(currentMonthSum)}
       </div>}

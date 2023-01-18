@@ -39,12 +39,10 @@ const useUpcomingFigures = (initialData: FigureCollectionType) => {
   }, monthlySums);
   // fill empty months with 0
   Object.keys(monthlySums).forEach((year) => {
+    const monthlySumsYear = monthlySums[parseInt(year)] ?? {};
     for (let i = 1; i <= 12; i++) {
-      if (monthlySums?.[parseInt(year)]?.[i] === 0) {
-        const monthlySumsYear = monthlySums[parseInt(year)];
-        if (monthlySumsYear !== undefined) {
-          monthlySumsYear[i] = 0;
-        }
+      if (monthlySumsYear[i] === undefined) {
+        monthlySumsYear[i] = 0;
       }
     }
   });
