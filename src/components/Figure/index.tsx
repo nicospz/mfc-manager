@@ -1,9 +1,9 @@
-import { formatPrice } from '@/helpers/format';
-import { FigureType } from '@/pages/api/scraper';
 import classNames from 'classnames';
 import React from 'react';
 import { faCalendar } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FigureType } from '@/pages/api/scraper';
+import { formatPrice } from '@/helpers/format';
 
 interface FigureProps {
   className?: string

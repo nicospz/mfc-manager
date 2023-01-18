@@ -1,7 +1,7 @@
+import { GetServerSideProps } from 'next';
 import UpcomingFigures from '@/components/UpcomingFigures';
 import { getUpcomingFigures } from '@/hooks/useUpcomingFigures';
 import { FigureCollectionType } from '@/pages/api/scraper';
-import { GetServerSideProps } from 'next';
 
 interface UpcomingFiguresPageProps {
   upcomingFiguresInitialData: FigureCollectionType

@@ -18,7 +18,22 @@ module.exports = {
     '@typescript-eslint/strict-boolean-expressions': 'off',
     semi: ['error', 'always'],
     '@typescript-eslint/semi': ['error', 'always'],
-    'promise/param-names': 'off'
+    'promise/param-names': 'off',
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'index',
+          'sibling',
+          'parent',
+          'internal',
+          'external',
+          'builtin',
+          'object',
+          'type'
+        ]
+      }
+    ]
   },
   settings: {
     react: {

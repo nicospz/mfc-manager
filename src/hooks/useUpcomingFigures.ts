@@ -1,8 +1,8 @@
-import { FigureCollectionType } from '@/pages/api/scraper';
 import parse from 'date-fns/parse';
-import { IncomingMessage } from 'http';
 import absoluteUrl from 'next-absolute-url';
 import { useQuery } from 'react-query';
+import { IncomingMessage } from 'http';
+import { FigureCollectionType } from '@/pages/api/scraper';
 
 export const getUpcomingFigures = async (req?: IncomingMessage) => {
   let url = '/api/upcoming-figures';

@@ -1,6 +1,6 @@
 import { ElementHandle } from 'puppeteer-core';
-import fs from 'fs';
 import csv from 'csvtojson';
+import fs from 'fs';
 import { startBrowser } from '@/helpers/scraper/browser';
 import { FigureType } from '@/pages/api/scraper';
 

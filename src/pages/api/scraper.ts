@@ -1,5 +1,5 @@
-import { Figures, scrapeCollection } from '@/helpers/scraper';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { Figures, scrapeCollection } from '@/helpers/scraper';
 import { s3 } from '@/helpers/s3';
 
 export interface FigureType {

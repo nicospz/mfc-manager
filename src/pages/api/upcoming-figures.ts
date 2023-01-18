@@ -1,6 +1,6 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import { s3 } from '@/helpers/s3';
 import { FigureCollectionType } from '@/pages/api/scraper';
-import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler (
   _req: NextApiRequest,

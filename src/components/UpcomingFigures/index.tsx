@@ -1,9 +1,9 @@
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft, faAngleRight } from '@fortawesome/pro-solid-svg-icons';
 import Figure from '@/components/Figure';
 import { formatPrice } from '@/helpers/format';
 import useUpcomingFigures from '@/hooks/useUpcomingFigures';
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight, faAngleLeft } from '@fortawesome/pro-solid-svg-icons';
 import Button from '@/components/Button';
 import Chart from '@/components/UpcomingFigures/Chart';
 import { FigureCollectionType } from '@/pages/api/scraper';
