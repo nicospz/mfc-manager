@@ -27,15 +27,16 @@ const Figure: React.FC<FigureProps> = ({
       rel="noopener noreferrer"
       className={classNames(
         className,
-        "flex items-center gap-4 p-2 rounded-lg bg-slate-50"
+        "flex gap-4 p-2 rounded-lg bg-slate-50 h-23"
       )}
     >
       <img
         alt={title}
         src={`https://static.myfigurecollection.net/upload/items/${id}.jpg`}
+        className="h-full rounded-md"
       />
-      <div className="flex flex-col">
-        <span>{title}</span>
+      <div className="flex flex-col justify-between">
+        <span className="line-clamp-2">{title}</span>
         <div className="flex gap-2">
           <span className="flex items-center gap-1">
             <FontAwesomeIcon icon={faCalendar} />
