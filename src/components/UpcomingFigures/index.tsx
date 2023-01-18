@@ -72,7 +72,22 @@ const UpcomingFigures: React.FC = () => {
     }
   };
 
-  const handlers = useSwipeable({
+  // handle arrow keys handler
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        handlePrevMonth();
+      } else if (event.key === "ArrowRight") {
+        handleNextMonth();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
+  const swipeHandlers = useSwipeable({
     onSwipeStart: (eventData) => {
       if (eventData.dir === "Left") handleNextMonth();
       else if (eventData.dir === "Right") handlePrevMonth();
@@ -114,7 +129,7 @@ const UpcomingFigures: React.FC = () => {
         </div>
       )}
       {/* Swipeable div */}
-      <div className="flex flex-col flex-1" {...handlers}>
+      <div className="flex flex-col flex-1" {...swipeHandlers}>
         {/* Chart */}
         {!!currentYearSums && (
           <Chart
