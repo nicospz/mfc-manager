@@ -8,12 +8,12 @@ import {
   YAxis
 } from 'recharts';
 
-interface MonthData { month: number, price: number }
+interface MonthData { month: number; price: number }
 
 interface ChartProps {
-  data: MonthData[]
-  currentMonth: number
-  onMonthClick: (monthData: MonthData) => void
+  data: MonthData[];
+  currentMonth: number;
+  onMonthClick: (monthData: MonthData) => void;
 }
 
 const Chart: React.FC<ChartProps> = ({ data, currentMonth, onMonthClick }) => {

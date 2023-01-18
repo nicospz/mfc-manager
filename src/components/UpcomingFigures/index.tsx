@@ -9,7 +9,8 @@ import Chart from '@/components/UpcomingFigures/Chart';
 import { FigureCollectionType } from '@/pages/api/scraper';
 
 interface UpcomingFiguresProps {
-  upcomingFiguresInitialData: FigureCollectionType
+  upcomingFiguresInitialData: FigureCollectionType;
+
 }
 
 const UpcomingFigures: React.FC<UpcomingFiguresProps> = ({

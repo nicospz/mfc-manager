@@ -6,11 +6,11 @@ import { FigureType } from '@/pages/api/scraper';
 import { formatPrice } from '@/helpers/format';
 
 interface FigureProps {
-  className?: string
-  id: FigureType['id']
-  title: FigureType['title']
-  releaseDate: FigureType['releaseDate']
-  price: FigureType['price']
+  className?: string;
+  id: FigureType['id'];
+  title: FigureType['title'];
+  releaseDate: FigureType['releaseDate'];
+  price: FigureType['price'];
 }
 
 const Figure: React.FC<FigureProps> = ({

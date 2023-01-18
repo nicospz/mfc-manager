@@ -3,18 +3,18 @@ import { Figures, scrapeCollection } from '@/helpers/scraper';
 import { s3 } from '@/helpers/s3';
 
 export interface FigureType {
-  id: string
-  title: string
-  releaseDate: string
-  shop: string
-  price: number
-  paymentDate: string
-  status: string
+  id: string;
+  title: string;
+  releaseDate: string;
+  shop: string;
+  price: number;
+  paymentDate: string;
+  status: string;
 }
 
 export interface FigureCollectionType {
-  figures: Figures
-  updatedAt: Date
+  figures: Figures;
+  updatedAt: Date;
 }
 
 export default async function handler (

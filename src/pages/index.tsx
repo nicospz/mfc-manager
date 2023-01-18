@@ -4,7 +4,7 @@ import { getUpcomingFigures } from '@/hooks/useUpcomingFigures';
 import { FigureCollectionType } from '@/pages/api/scraper';
 
 interface UpcomingFiguresPageProps {
-  upcomingFiguresInitialData: FigureCollectionType
+  upcomingFiguresInitialData: FigureCollectionType;
 }
 
 const UpcomingFiguresPage: React.FC<UpcomingFiguresPageProps> = ({
