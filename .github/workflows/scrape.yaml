@@ -1,4 +1,4 @@
-name: hourly-cron
+name: scrape
 on:
   workflow_dispatch:
   schedule:
