@@ -1,29 +1,19 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight } from '@fortawesome/pro-solid-svg-icons';
+import { faAngleLeft, faAngleRight, faSpinner } from '@fortawesome/pro-regular-svg-icons';
 import dynamic from 'next/dynamic';
 import Figure from '@/components/Figure';
 import { formatPrice } from '@/helpers/format';
 import useUpcomingFigures from '@/hooks/useUpcomingFigures';
 import Button from '@/components/Button';
-import { FigureCollectionType } from '@/pages/api/scraper';
 
 const Chart = dynamic(
   import('@/components/UpcomingFigures/Chart'),
   { ssr: false }
 );
 
-interface UpcomingFiguresProps {
-  upcomingFiguresInitialData: FigureCollectionType;
-
-}
-
-const UpcomingFigures: React.FC<UpcomingFiguresProps> = ({
-  upcomingFiguresInitialData
-}) => {
-  const { upcomingFigures, monthlySums } = useUpcomingFigures(
-    upcomingFiguresInitialData
-  );
+const UpcomingFigures: React.FC = () => {
+  const { upcomingFigures, monthlySums, isLoading } = useUpcomingFigures();
   const [currentYear, setCurrentYear] = React.useState(
     new Date().getFullYear()
   );
@@ -60,6 +50,17 @@ const UpcomingFigures: React.FC<UpcomingFiguresProps> = ({
 
   const currentYearSums = monthlySums?.[currentYear];
   const currentMonthSum = currentYearSums?.[currentMonth];
+
+  if (isLoading) {
+    //  Add loading state div containing vertically horizontally centered spinner
+    return <div className='flex items-center justify-center w-full h-full'>
+      <FontAwesomeIcon
+        icon={faSpinner}
+        size='2x'
+        spin
+      />
+    </div>;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center w-full gap-2 px-5 py-4">

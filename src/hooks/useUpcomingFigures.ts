@@ -15,11 +15,10 @@ export const getUpcomingFigures = async (req?: IncomingMessage) => {
   return data as FigureCollectionType;
 };
 
-const useUpcomingFigures = (initialData: FigureCollectionType) => {
+const useUpcomingFigures = () => {
   const { data: upcomingFigures, isLoading } = useQuery<FigureCollectionType>({
     queryKey: ['upcomingFigures'],
-    queryFn: async () => await getUpcomingFigures(),
-    initialData
+    queryFn: async () => await getUpcomingFigures()
   });
 
   // calculate monthly sum of figure prices per year
