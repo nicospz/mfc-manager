@@ -1,12 +1,17 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/pro-solid-svg-icons';
+import dynamic from 'next/dynamic';
 import Figure from '@/components/Figure';
 import { formatPrice } from '@/helpers/format';
 import useUpcomingFigures from '@/hooks/useUpcomingFigures';
 import Button from '@/components/Button';
-import Chart from '@/components/UpcomingFigures/Chart';
 import { FigureCollectionType } from '@/pages/api/scraper';
+
+const Chart = dynamic(
+  import('@/components/UpcomingFigures/Chart'),
+  { ssr: false }
+);
 
 interface UpcomingFiguresProps {
   upcomingFiguresInitialData: FigureCollectionType;
