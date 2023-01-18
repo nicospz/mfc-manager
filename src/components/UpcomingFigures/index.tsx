@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight, faSpinner } from '@fortawesome/pro-regular-svg-icons';
 import dynamic from 'next/dynamic';
+import { useSwipeable } from 'react-swipeable';
 import Figure from '@/components/Figure';
 import { formatPrice } from '@/helpers/format';
 import useUpcomingFigures from '@/hooks/useUpcomingFigures';
@@ -30,6 +31,9 @@ const UpcomingFigures: React.FC = () => {
     );
   });
 
+  const currentYearSums = monthlySums?.[currentYear];
+  const currentMonthSum = currentYearSums?.[currentMonth];
+
   let previousMonth = currentMonth - 1;
   let previousYear: number;
   if (previousMonth === 0) {
@@ -48,8 +52,26 @@ const UpcomingFigures: React.FC = () => {
     nextYear = currentYear;
   }
 
-  const currentYearSums = monthlySums?.[currentYear];
-  const currentMonthSum = currentYearSums?.[currentMonth];
+  const isHandlePrevDisabled = monthlySums[previousYear] === undefined;
+  const isHandleNextDisabled = monthlySums[nextYear] === undefined;
+
+  const handlePrevMonth = () => {
+    if (!isHandlePrevDisabled) {
+      setCurrentMonth(previousMonth);
+      setCurrentYear(previousYear);
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (!isHandleNextDisabled) {
+      setCurrentMonth(nextMonth);
+      setCurrentYear(nextYear);
+    }
+  };
+
+  const handlers = useSwipeable({
+    onSwipeStart: (eventData) => { if (eventData.dir === 'Left') handleNextMonth(); else if (eventData.dir === 'Right') handlePrevMonth(); }
+  });
 
   if (isLoading) {
     //  Add loading state div containing vertically horizontally centered spinner
@@ -67,11 +89,8 @@ const UpcomingFigures: React.FC = () => {
       <div className="flex items-center gap-2">
         {/* Icon to decrement month */}
         <Button
-          disabled={monthlySums[previousYear] === undefined}
-          onClick={() => {
-            setCurrentMonth(previousMonth);
-            setCurrentYear(previousYear);
-          }}
+          disabled={isHandlePrevDisabled}
+          onClick={handlePrevMonth}
         >
           <FontAwesomeIcon icon={faAngleLeft} />
         </Button>
@@ -80,11 +99,8 @@ const UpcomingFigures: React.FC = () => {
         </span>
         {/* Icon to increment month */}
         <Button
-          disabled={monthlySums[nextYear] === undefined}
-          onClick={() => {
-            setCurrentMonth(nextMonth);
-            setCurrentYear(nextYear);
-          }}
+          disabled={isHandleNextDisabled}
+          onClick={handleNextMonth}
         >
           <FontAwesomeIcon icon={faAngleRight} />
         </Button>
@@ -94,6 +110,8 @@ const UpcomingFigures: React.FC = () => {
       <div className="text-3xl text-slate-100">
         {formatPrice(currentMonthSum)}
       </div>}
+      {/* Swipeable div */}
+      <div {...handlers}>
       {/* Chart */}
       {!!currentYearSums && (
         <Chart
@@ -114,6 +132,7 @@ const UpcomingFigures: React.FC = () => {
         {filteredFiguresByDate?.map((figure) => (
             <Figure key={figure.id} {...figure} className="w-full" />
         ))}
+      </div>
       </div>
     </div>
   );
