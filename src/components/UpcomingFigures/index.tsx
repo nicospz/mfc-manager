@@ -80,6 +80,7 @@ const UpcomingFigures: React.FC = () => {
         window.scrollTo(0, 0);
       }
     },
+    preventScrollOnSwipe: true,
   });
 
   if (isLoading) {
@@ -92,7 +93,7 @@ const UpcomingFigures: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full gap-2 px-5 py-4">
+    <div className="flex flex-col items-center flex-1 w-full gap-2 px-5 py-4">
       <div className="flex items-center gap-2">
         {/* Icon to decrement month */}
         <Button disabled={isHandlePrevDisabled} onClick={handlePrevMonth}>
@@ -113,7 +114,7 @@ const UpcomingFigures: React.FC = () => {
         </div>
       )}
       {/* Swipeable div */}
-      <div {...handlers}>
+      <div className="flex flex-col flex-1" {...handlers}>
         {/* Chart */}
         {!!currentYearSums && (
           <Chart
@@ -128,10 +129,12 @@ const UpcomingFigures: React.FC = () => {
           />
         )}
         {/* Figure list */}
-        <div className="grid gap-2 md:grid-cols-2">
-          {filteredFiguresByDate?.map((figure) => (
-            <Figure key={figure.id} {...figure} className="w-full" />
-          ))}
+        <div className="flex-1">
+          <div className="grid gap-2 md:grid-cols-2">
+            {filteredFiguresByDate?.map((figure) => (
+              <Figure key={figure.id} {...figure} className="w-full" />
+            ))}
+          </div>
         </div>
       </div>
     </div>
