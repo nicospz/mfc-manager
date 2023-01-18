@@ -1,5 +1,5 @@
-import { ElementHandle } from 'puppeteer-core';
 import csv from 'csvtojson';
+import fetch from 'node-fetch';
 import fs from 'fs';
 import { startBrowser } from '@/helpers/scraper/browser';
 import { FigureType } from '@/pages/api/scraper';
@@ -10,16 +10,12 @@ const SIGNIN_URL = 'https://myfigurecollection.net/session/signin/';
 const COLLECTION_URL = 'https://myfigurecollection.net/manager/collection/';
 
 export const scrapeCollection = async () => {
-  let startTime = Date.now();
   const browser = await startBrowser();
   if (!browser) return [];
   const page = await browser.newPage();
-  console.log('Browser opened in', Date.now() - startTime, 'ms');
 
-  startTime = Date.now();
   console.log(`Navigating to ${SIGNIN_URL}...`);
   await page.goto(SIGNIN_URL);
-  console.log('Page loaded in', Date.now() - startTime, 'ms');
 
   // Sign in
   await page.type(
@@ -31,48 +27,29 @@ export const scrapeCollection = async () => {
     process.env.MFC_PASSWORD as string
   );
   console.log('Signing in...');
-  startTime = Date.now();
   await page.click('input[type=submit]');
   await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
-  console.log('Signed in in', Date.now() - startTime, 'ms');
+  const cookies = await page.cookies();
 
-  // Go to collection
-  console.log(`Navigating to ${COLLECTION_URL}...`);
-  startTime = Date.now();
-  await page.goto(COLLECTION_URL);
-  console.log('Page loaded in', Date.now() - startTime, 'ms');
-
-  // Opening Export CSV Menu
-  console.log('Opening Export CSV Menu...');
-  startTime = Date.now();
-  const exportCsvButtonList = await page.$x(
-    "//a[contains(@class, 'action export')]"
-  );
-  const exportCsvButton =
-    exportCsvButtonList[0] as unknown as ElementHandle<Element>;
-  await exportCsvButton.evaluate((b) => { (b as HTMLAnchorElement).click(); });
-  await new Promise((r) => setTimeout(r, 750));
-  console.log('Export CSV Menu opened in', Date.now() - startTime, 'ms');
-
-  // Clicking CSV Export
-  console.log('Clicking CSV Export...');
-  startTime = Date.now();
-  const downloadButtonList = await page.$x("//input[@value='CSV Export']");
-  const downloadButton =
-    downloadButtonList[0] as unknown as ElementHandle<Element>;
-  const client = await page.target().createCDPSession();
-  await client.send('Page.setDownloadBehavior', {
-    behavior: 'allow',
-    downloadPath: '/tmp/'
+  console.log('Exporting collection...');
+  const response = await fetch(COLLECTION_URL, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      cookie: cookies.map((cookie) => `${cookie.name}=${cookie.value}`).join(';')
+    },
+    body: 'commit=exportItemsToCSV&id=1&full_name=1&root=1&categoryid=1&date=1&price=1&scale=1&barcode=1&status=1&num=1&score=1&bdate=1&sdate=1&odate=1&value=1&location=1&method=1&track=1&wishability=1&note=1',
+    method: 'POST'
   });
-  await downloadButton.evaluate((b) => { (b as HTMLAnchorElement).click(); });
-  await new Promise((r) => setTimeout(r, 500));
-  console.log('File downloaded in', Date.now() - startTime, 'ms');
+  const fileStream = fs.createWriteStream('/tmp/mfc-collection.csv');
+  await new Promise((resolve, reject) => {
+    response.body.pipe(fileStream);
+    fileStream.on('finish', resolve);
+    fileStream.on('error', reject);
+  });
 
   // Converting CSV to JSON
   let jsonArray = [];
   console.log('Converting CSV to JSON...');
-  startTime = Date.now();
   const dir = fs.readdirSync('/tmp/');
   const csvFile = dir.find((file) => file.includes('.csv'));
   if (csvFile) {
@@ -85,7 +62,6 @@ export const scrapeCollection = async () => {
       if (err) console.error(err);
     });
   }
-  console.log('CSV converted to JSON in', Date.now() - startTime, 'ms');
 
   return (
     jsonArray
