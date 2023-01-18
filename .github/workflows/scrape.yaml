@@ -10,5 +10,5 @@ jobs:
       - name: Call our API route
         run: |
           curl --request POST \
-          --url 'https://mfc-manager.vercel.app/api/scraper' \
+          --url '${{ secrets.WEBSITE_URL }}/api/scraper' \
           --header 'Authorization: Bearer ${{ secrets.API_SECRET_KEY }}'
