@@ -7,7 +7,19 @@ import { useState } from 'react';
 config.autoAddCss = false;
 
 export default function App ({ Component, pageProps }: AppProps) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(() => new QueryClient(
+    {
+      defaultOptions: {
+        queries: {
+          refetchOnWindowFocus: false,
+          refetchOnMount: false,
+          cacheTime: 1 * 60 * 60 * 1000,
+          staleTime: 1 * 60 * 60 * 1000,
+          retry: 1
+        }
+      }
+    }
+  ));
 
   return (
     <QueryClientProvider client={queryClient}>
