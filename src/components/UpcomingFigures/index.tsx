@@ -17,7 +17,7 @@ const Chart = dynamic(import("@/components/UpcomingFigures/Chart"), {
 });
 
 const UpcomingFigures: React.FC = () => {
-  const { upcomingFigures, monthlySums, isLoading } = useUpcomingFigures();
+  const { figures, monthlySums, loading } = useUpcomingFigures();
   const [currentYear, setCurrentYear] = React.useState(
     new Date().getFullYear()
   );
@@ -25,7 +25,10 @@ const UpcomingFigures: React.FC = () => {
     new Date().getMonth() + 1
   );
 
-  const filteredFiguresByDate = upcomingFigures?.figures?.filter((figure) => {
+  const filteredFiguresByDate = figures.filter((figure) => {
+    if (!figure) {
+      return false;
+    }
     const figureDate = new Date(figure.releaseDate);
     // Check if the figure is in the current month
     return (
@@ -98,7 +101,7 @@ const UpcomingFigures: React.FC = () => {
     preventScrollOnSwipe: true,
   });
 
-  if (isLoading) {
+  if (loading) {
     //  Add loading state div containing vertically horizontally centered spinner
     return (
       <div className="flex items-center justify-center w-full h-full">
@@ -146,9 +149,12 @@ const UpcomingFigures: React.FC = () => {
         {/* Figure list */}
         <div className="flex-1">
           <div className="grid gap-2 md:grid-cols-2">
-            {filteredFiguresByDate?.map((figure) => (
-              <Figure key={figure.id} {...figure} className="w-full" />
-            ))}
+            {filteredFiguresByDate?.map(
+              (figure) =>
+                figure && (
+                  <Figure key={figure.mfcId} {...figure} className="w-full" />
+                )
+            )}
           </div>
         </div>
       </div>

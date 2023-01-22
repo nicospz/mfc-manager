@@ -2,12 +2,13 @@ import classNames from "classnames";
 import React from "react";
 import { faCalendar } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FigureType } from "@/pages/api/scraper";
+import format from "date-fns/format";
 import { formatPrice } from "@/helpers/format";
+import { Figure as FigureType } from "@/graphql-types";
 
 interface FigureProps {
   className?: string;
-  id: FigureType["id"];
+  mfcId: FigureType["mfcId"];
   title: FigureType["title"];
   releaseDate: FigureType["releaseDate"];
   price: FigureType["price"];
@@ -15,14 +16,14 @@ interface FigureProps {
 
 const Figure: React.FC<FigureProps> = ({
   className,
-  id,
+  mfcId,
   title,
   releaseDate,
   price,
 }) => {
   return (
     <a
-      href={`https://myfigurecollection.net/item/${id}`}
+      href={`https://myfigurecollection.net/item/${mfcId}`}
       target="_blank"
       rel="noopener noreferrer"
       className={classNames(
@@ -32,15 +33,17 @@ const Figure: React.FC<FigureProps> = ({
     >
       <img
         alt={title}
-        src={`https://static.myfigurecollection.net/upload/items/${id}.jpg`}
+        src={`https://static.myfigurecollection.net/upload/items/${mfcId}.jpg`}
         className="h-full rounded-md"
       />
       <div className="flex flex-col justify-between">
         <span className="line-clamp-2">{title}</span>
         <div className="flex gap-2">
           <span className="flex items-center gap-1">
-            <FontAwesomeIcon icon={faCalendar} />
-            {releaseDate}
+            <>
+              <FontAwesomeIcon icon={faCalendar} />
+              {format(new Date(releaseDate), "yyyy-MM-dd")}
+            </>
           </span>
           <span className="flex items-center">{formatPrice(price)}</span>
         </div>

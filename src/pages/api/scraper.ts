@@ -1,25 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Figures, scrapeCollection } from "@/helpers/scraper";
-import { s3 } from "@/helpers/s3";
-
-export interface FigureType {
-  id: string;
-  title: string;
-  releaseDate: string;
-  shop: string;
-  price: number;
-  paymentDate: string;
-  status: string;
-}
-
-export interface FigureCollectionType {
-  figures: Figures;
-  updatedAt: Date;
-}
+import { scrapeCollection } from "@/helpers/scraper";
+import { mongoDropAndImport } from "@/helpers/mongo";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<FigureCollectionType | { message: string }>
+  res: NextApiResponse<{ message: string }>
 ) {
   if (req.method === "POST" || process.env.NODE_ENV === "development") {
     try {
@@ -30,35 +15,11 @@ export default async function handler(
       ) {
         // Get data from your database
         const figures = await scrapeCollection();
-        const json = {
-          figures,
-          updatedAt: new Date(),
-        };
 
-        const bucketParams = {
-          Bucket: process.env.R2_BUCKET_NAME as string,
-          Key: "mfc_collection.json",
-          Body: JSON.stringify(json),
-        };
+        // Upload to MongoDB
+        await mongoDropAndImport(figures);
 
-        // Upload the new object to the bucket.
-        console.log("Uploading object to R2...");
-        try {
-          await s3
-            .putObject({
-              Bucket: process.env.R2_BUCKET_NAME as string,
-              Key: "mfc_collection.json",
-              Body: JSON.stringify(json),
-            })
-            .promise();
-          console.log(
-            `Successfully uploaded object: ${bucketParams.Bucket}/${bucketParams.Key}`
-          );
-        } catch (err) {
-          console.log("Error", err);
-        }
-
-        res.status(200).json(json);
+        res.status(200).json({ message: "ok" });
       } else {
         res.status(401).json({ message: "Unauthorized" });
       }

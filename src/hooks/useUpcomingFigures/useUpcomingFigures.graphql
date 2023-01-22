@@ -1,0 +1,10 @@
+query AllFigures {
+  figures(query: { status: "Ordered" }, sortBy: RELEASEDATE_ASC) {
+    mfcId
+    title
+    price
+    shop
+    status
+    releaseDate
+  }
+}

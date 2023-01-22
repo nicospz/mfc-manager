@@ -2,9 +2,6 @@ import csv from "csvtojson";
 import fetch from "node-fetch";
 import fs from "fs";
 import { startBrowser } from "@/helpers/scraper/browser";
-import { FigureType } from "@/pages/api/scraper";
-
-export type Figures = FigureType[];
 
 const SIGNIN_URL = "https://myfigurecollection.net/session/signin/";
 const COLLECTION_URL = "https://myfigurecollection.net/manager/collection/";
@@ -68,11 +65,11 @@ export const scrapeCollection = async () => {
   return (
     jsonArray
       .map((element) => {
-        const figure: FigureType = {
-          id: element.ID,
+        const figure = {
+          mfcId: element.ID,
           title: element.Title,
           // replace 00 for 28 to avoid date-fns error
-          releaseDate: element["Release Date"].replace("00", "28"),
+          releaseDate: new Date(element["Release Date"].replace("00", "28")),
           shop: element.Shop,
           price: parseInt(element.Price),
           paymentDate: element["Payment Date"],
