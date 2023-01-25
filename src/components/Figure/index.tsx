@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React from "react";
-import { faCalendar } from "@fortawesome/pro-regular-svg-icons";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import format from "date-fns/format";
 import { formatPrice } from "@/helpers/format";

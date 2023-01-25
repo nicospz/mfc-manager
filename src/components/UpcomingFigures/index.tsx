@@ -4,7 +4,7 @@ import {
   faAngleLeft,
   faAngleRight,
   faSpinner,
-} from "@fortawesome/pro-regular-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import dynamic from "next/dynamic";
 import { useSwipeable } from "react-swipeable";
 import Figure from "@/components/Figure";
