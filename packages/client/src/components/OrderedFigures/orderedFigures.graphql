@@ -1,0 +1,11 @@
+query queryOrderedFigures {
+  figures(where: { status: { equals: Ordered } }) {
+    id
+    title
+    price
+    shop
+    status
+    releaseDate
+    paymentDate
+  }
+}

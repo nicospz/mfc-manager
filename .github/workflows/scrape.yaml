@@ -11,4 +11,4 @@ jobs:
         run: |
           curl --request POST \
           --url '${{ secrets.WEBSITE_URL }}/api/scraper' \
-          --header 'Authorization: Bearer ${{ secrets.API_SECRET_KEY }}'
+          --header 'Authorization: ${{ secrets.SCRAPER_SECRET_KEY }}'

@@ -1,0 +1,56 @@
+version: '3.8'
+
+x-common-variables: &common-variables
+  MYSQL_DATABASE: books
+  MYSQL_USER: MYSQL_USER
+  MYSQL_PASSWORD: MYSQL_PASSWORD
+
+services:
+  nginx:
+    depends_on:
+      - api
+      - client
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "3050:80"
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - "9906:3306"
+
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: "./packages/server"
+    depends_on:
+      - db
+    volumes:
+      - /app/node_modules
+      - ./packages/server:/app
+    environment:
+      <<: *common-variables
+      DATABASE_URL: db
+
+  client:
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    build:
+      dockerfile: Dockerfile
+      context: ./packages/client
+    volumes:
+      - /app/node_modules
+      - ./packages/client:/app
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
