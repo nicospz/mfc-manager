@@ -136,7 +136,7 @@ const OrderedFigures = () => {
         </div>
       )}
       {/* Swipeable div */}
-      <div className="flex flex-col flex-1" {...swipeHandlers}>
+      <div className="flex flex-col flex-1 w-full" {...swipeHandlers}>
         {/* Chart */}
         {!!currentYearSums && (
           <Chart
