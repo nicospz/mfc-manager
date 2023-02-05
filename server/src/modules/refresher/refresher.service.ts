@@ -6,7 +6,6 @@ import { FiguresService } from '@server/src/modules/figures/figures.service';
 import { startBrowser } from '@server/src/lib/browser';
 import { Cookie } from '@server/src/entities/cookie.entity';
 import { processDate } from '@server/src/lib/format';
-import FigureScraper from '@server/src/lib/figureScraper';
 import { Status } from '@server/src/entities/figure.entity';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const csvtojson = require('csvtojson');
@@ -125,22 +124,5 @@ export class RefresherService {
       await this.figuresService.create(figure);
     }
     return await this.figuresService.findAll();
-  }
-
-  getFigureInfo = async (id: number) => {
-    const scraper = new FigureScraper(id);
-    await scraper.setup();
-    console.log(scraper.getOrigin());
-  };
-
-  async refreshFigureInfo() {
-    // console.time('Figure info refreshed in: ');
-
-    const figures = await this.figuresService.findAll();
-    for (const figure of figures) {
-      await this.getFigureInfo(figure.id);
-    }
-    await this.getFigureInfo(figures[0].id);
-    return {};
   }
 }
