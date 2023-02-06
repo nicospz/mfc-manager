@@ -58,10 +58,8 @@ export class RefresherService {
     return await this.cookiesService.findAll();
   }
 
-  async refreshFigures() {
-    console.time('Figures refreshed in: ');
+  async fetchCollection() {
     const COLLECTION_URL = 'https://myfigurecollection.net/manager/collection/';
-    const browser = await startBrowser();
     const cookies = await this.cookiesService.findAll();
     const response = await fetch(COLLECTION_URL, {
       headers: {
@@ -69,60 +67,85 @@ export class RefresherService {
         cookie: cookies
           .map((cookie) => `${cookie.name}=${cookie.value}`)
           .join(';'),
+        credentials: 'includes',
       },
       body: 'commit=exportItemsToCSV&id=1&full_name=1&root=1&categoryid=1&date=1&price=1&scale=1&barcode=1&status=1&num=1&score=1&bdate=1&sdate=1&odate=1&value=1&location=1&method=1&track=1&wishability=1&note=1',
       method: 'POST',
     });
-    const fileStream = createWriteStream('./mfc-collection.csv');
-    await new Promise((resolve, reject) => {
-      response.body?.pipe(fileStream);
-      fileStream.on('finish', resolve);
-      fileStream.on('error', reject);
-    });
+    return response;
+  }
 
-    // Converting CSV to JSON
-    let jsonArray = [];
-    const dir = readdirSync('./');
-    const csvFile = dir.find((file) => file.includes('.csv'));
-    if (csvFile) {
-      // convert csv to json
-      const csvFilePath = `./${csvFile}`;
-      jsonArray = (await csvtojson().fromFile(csvFilePath)) as any[];
-      // remove csv file
-      unlink(csvFilePath, (err: any) => {
-        if (err) console.error(err);
+  async refreshFigures() {
+    console.time('Figures refreshed in: ');
+
+    try {
+      let response = await this.fetchCollection();
+      const contentType = response.headers.get('content-type');
+
+      if (contentType && !contentType.includes('text/plain')) {
+        console.error('Invalid content type. Authentication failed.');
+        console.log('Refreshing cookies and trying again...');
+        await this.refreshCookies();
+        response = await this.fetchCollection();
+
+        if (contentType && !contentType.includes('text/plain')) {
+          throw Error('Invalid content type. Authentication failed.');
+        }
+      }
+
+      const fileStream = createWriteStream('./mfc-collection.csv');
+      await new Promise((resolve, reject) => {
+        response.body?.pipe(fileStream);
+        fileStream.on('finish', resolve);
+        fileStream.on('error', reject);
       });
+      // Converting CSV to JSON
+      let jsonArray = [];
+      const dir = readdirSync('./');
+      const csvFile = dir.find((file) => file.includes('.csv'));
+      if (csvFile) {
+        // convert csv to json
+        const csvFilePath = `./${csvFile}`;
+        jsonArray = (await csvtojson().fromFile(csvFilePath)) as any[];
+        // remove csv file
+        unlink(csvFilePath, (err: any) => {
+          if (err) console.error(err);
+        });
+      }
+
+      const figures = jsonArray
+        .map((element) => {
+          const paymentDate = processDate(element['Payment date']);
+          const releaseDate = processDate(element['Release Date']);
+          const figure = {
+            id: parseInt(element.ID),
+            title: element.Title,
+            price: parseInt(element.Price),
+            status: element.Status as Status,
+            shop: element.Shop,
+            releaseDate,
+            paymentDate,
+          };
+          return figure;
+        })
+        // order by release date
+        .sort((a, b) => {
+          if (!a.releaseDate) return -1;
+          if (!b.releaseDate) return 1;
+          const aDate = new Date(a.releaseDate);
+          const bDate = new Date(b.releaseDate);
+          return aDate.getTime() - bDate.getTime();
+        });
+      if (figures.length > 0) {
+        await this.figuresService.clear();
+        for (const figure of figures) {
+          await this.figuresService.create(figure);
+        }
+      }
+    } catch (e) {
+      console.error(e);
     }
     console.timeEnd('Figures refreshed in: ');
-    await browser.close();
-
-    const figures = jsonArray
-      .map((element) => {
-        const paymentDate = processDate(element['Payment date']);
-        const releaseDate = processDate(element['Release Date']);
-        const figure = {
-          id: parseInt(element.ID),
-          title: element.Title,
-          price: parseInt(element.Price),
-          status: element.Status as Status,
-          shop: element.Shop,
-          releaseDate,
-          paymentDate,
-        };
-        return figure;
-      })
-      // order by release date
-      .sort((a, b) => {
-        if (!a.releaseDate) return -1;
-        if (!b.releaseDate) return 1;
-        const aDate = new Date(a.releaseDate);
-        const bDate = new Date(b.releaseDate);
-        return aDate.getTime() - bDate.getTime();
-      });
-    await this.figuresService.clear();
-    for (const figure of figures) {
-      await this.figuresService.create(figure);
-    }
     return await this.figuresService.findAll();
   }
 }
