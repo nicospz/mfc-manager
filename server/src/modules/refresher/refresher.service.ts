@@ -1,5 +1,6 @@
 import { createWriteStream, readdirSync, unlink } from 'fs';
 import fetch from 'node-fetch';
+import { load } from 'cheerio';
 import { Injectable } from '@nestjs/common';
 import { CookiesService } from '@server/src/modules/cookies/cookies.service';
 import { FiguresService } from '@server/src/modules/figures/figures.service';
@@ -155,8 +156,6 @@ export class RefresherService {
   }
 
   async refreshImages() {
-    const browser = await startBrowser();
-    if (!browser) return [];
     console.time('Images refreshed in: ');
     const figures = await this.figuresService.findAll();
     const length = figures.length;
@@ -164,12 +163,13 @@ export class RefresherService {
     for (const figure of figures) {
       if (figure.imageUrl) continue;
       console.time(`${figure.title} image refreshed in: `);
-      // Scrape image
-      const page = await browser.newPage();
-      await page.goto(`https://myfigurecollection.net/item/${figure.id}`);
-      const img = await page.$('img.thumbnail');
-      if (img) {
-        const src = await page.evaluate((el: any) => el.src, img);
+      const response = await fetch(
+        `https://myfigurecollection.net/item/${figure.id}`,
+      );
+      const html = await response.text();
+      const $ = load(html);
+      const src = $('img.thumbnail').attr('src');
+      if (src) {
         await this.figuresService.update(figure.id, { imageUrl: src });
         console.timeEnd(`${figure.title} image refreshed in: `);
         console.log(src);
@@ -177,7 +177,6 @@ export class RefresherService {
       i++;
       console.log(`${i}/${length}`);
     }
-    await browser.close();
     console.timeEnd('Images refreshed in: ');
     return await this.figuresService.findAll();
   }
