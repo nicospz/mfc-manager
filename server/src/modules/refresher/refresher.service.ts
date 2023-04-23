@@ -126,7 +126,6 @@ export class RefresherService {
 
       const figures = jsonArray
         .map((element) => {
-          console.log(element);
           const paymentDate = processDate(element['Payment date']);
           const releaseDate = processDate(element['Release Date']);
           const figure = {
