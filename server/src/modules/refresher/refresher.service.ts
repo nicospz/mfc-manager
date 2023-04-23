@@ -1,10 +1,10 @@
 import { createWriteStream, readdirSync, unlink } from 'fs';
 import fetch from 'node-fetch';
 import { load } from 'cheerio';
+import setCookie from 'set-cookie-parser';
 import { Injectable } from '@nestjs/common';
 import { CookiesService } from '@server/src/modules/cookies/cookies.service';
 import { FiguresService } from '@server/src/modules/figures/figures.service';
-import { startBrowser } from '@server/src/lib/browser';
 import { Cookie } from '@server/src/entities/cookie.entity';
 import { processDate } from '@server/src/lib/format';
 import { Status } from '@server/src/entities/figure.entity';
@@ -23,39 +23,48 @@ export class RefresherService {
     console.time('Cookies refreshed in: ');
     const SIGNIN_URL = 'https://myfigurecollection.net/session/signin/';
 
-    const browser = await startBrowser();
-    if (!browser) return [];
-    const page = await browser.newPage();
+    const response = await fetch(SIGNIN_URL, {
+      headers: {
+        accept: 'application/json, text/javascript, */*; q=0.01',
+        'accept-language': 'en-US,en;q=0.9,ja;q=0.8,es;q=0.7',
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'sec-ch-ua':
+          '"Chromium";v="112", "Google Chrome";v="112", "Not:A-Brand";v="99"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"macOS"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-origin',
+        'x-requested-with': 'XMLHttpRequest',
+      },
+      body: `commit=signIn&from=https%3A%2F%2Fmyfigurecollection.net%2F&username=${
+        process.env.MFC_USER as string
+      }&password=${process.env.MFC_PASSWORD as string}&remember=1`,
+      method: 'POST',
+    });
+    const setCookieHeader = response.headers.get('Set-Cookie');
 
-    await page.goto(SIGNIN_URL);
+    let cookies: setCookie.Cookie[] = [];
+    if (setCookieHeader) {
+      cookies = setCookie.parse(setCookieHeader, {
+        decodeValues: true, // default: true
+      });
+    }
 
-    // Sign in
-    await page.type(
-      'input[type=text][name=username]',
-      process.env.MFC_USER as string,
-    );
-    await page.type(
-      'input[type=password][name=password]',
-      process.env.MFC_PASSWORD as string,
-    );
-    await page.click('input[type=submit]');
-    await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
-    const cookies = await page.cookies();
     for (const cookie of cookies) {
       // if (!cookie.name.includes('_g')) {
       if (cookie.name === 'PHPSESSID') {
         await this.cookiesService.create({
           name: cookie.name,
           value: cookie.value,
-          domain: cookie.domain,
-          path: cookie.path,
-          expiresAt: new Date(cookie.expires),
+          domain: cookie.domain || '',
+          path: cookie.path || '',
+          expiresAt: new Date(cookie.expires || ''),
           updatedAt: new Date(),
         });
       }
     }
     console.timeEnd('Cookies refreshed in: ');
-    await browser.close();
     return await this.cookiesService.findAll();
   }
 
