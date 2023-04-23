@@ -90,13 +90,14 @@ export class RefresherService {
 
     try {
       let response = await this.fetchCollection();
-      const contentType = response.headers.get('content-type');
+      let contentType = response.headers.get('content-type');
 
       if (contentType && !contentType.includes('text/plain')) {
         console.error('Invalid content type. Authentication failed.');
         console.log('Refreshing cookies and trying again...');
         await this.refreshCookies();
         response = await this.fetchCollection();
+        contentType = response.headers.get('content-type');
 
         if (contentType && !contentType.includes('text/plain')) {
           throw Error('Invalid content type. Authentication failed.');
