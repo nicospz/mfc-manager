@@ -4,8 +4,8 @@ import { DataSource } from 'typeorm';
 
 const devConfig: DataSourceOptions = {
   type: 'sqlite',
-  database: process.env.CONFIG_DIRECTORY
-    ? `${process.env.CONFIG_DIRECTORY}/db/db.sqlite3`
+  database: process.env.DATABASE_URL
+    ? process.env.DATABASE_URL
     : './config/db/db.sqlite3',
   synchronize: false,
   migrationsRun: true,
@@ -18,8 +18,8 @@ const devConfig: DataSourceOptions = {
 
 const prodConfig: DataSourceOptions = {
   type: 'sqlite',
-  database: process.env.CONFIG_DIRECTORY
-    ? `${process.env.CONFIG_DIRECTORY}/db/db.sqlite3`
+  database: process.env.DATABASE_URL
+    ? process.env.DATABASE_URL
     : 'config/db/db.sqlite3',
   synchronize: false,
   migrationsRun: true,

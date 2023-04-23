@@ -2,7 +2,7 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
   require: ["ts-node/register"],
-  schema: "http://localhost:3000/graphql",
+  schema: "http://localhost:8080/graphql",
   documents: ["src/**/*.graphql"],
   generates: {
     "src/graphql-types.ts": {

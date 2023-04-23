@@ -22,5 +22,5 @@ COPY --from=builder /app/dist ./dist
 
 ARG MFC_USER
 ARG MFC_PASSWORD
-EXPOSE 3000
+EXPOSE 8080
 CMD ["pnpm", "start"]

@@ -23,7 +23,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const httpLink = new HttpLink({
-  uri: `http://localhost:${process.env.PORT ?? "3000"}/graphql`, // Server URL (must be absolute)
+  uri: `http://localhost:${process.env.PORT ?? "8080"}/graphql`, // Server URL (must be absolute)
   credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
 });
 
