@@ -13,6 +13,7 @@ interface FigureProps {
   releaseDate?: FigureType["releaseDate"];
   paymentDate?: FigureType["paymentDate"];
   price: FigureType["price"];
+  imageUrl?: FigureType["imageUrl"];
 }
 
 const Figure: React.FC<FigureProps> = ({
@@ -21,6 +22,7 @@ const Figure: React.FC<FigureProps> = ({
   title,
   releaseDate,
   price,
+  imageUrl,
 }) => {
   return (
     <a
@@ -32,11 +34,9 @@ const Figure: React.FC<FigureProps> = ({
         "flex gap-4 p-2 rounded-lg bg-slate-50 h-23"
       )}
     >
-      <img
-        alt={title}
-        src={`https://static.myfigurecollection.net/upload/items/${id}.jpg`}
-        className="h-full rounded-md"
-      />
+      {imageUrl && (
+        <img alt={title} src={imageUrl} className="h-full rounded-md" />
+      )}
       <div className="flex flex-col justify-between">
         <span className="line-clamp-2">{title}</span>
         <div className="flex gap-2">

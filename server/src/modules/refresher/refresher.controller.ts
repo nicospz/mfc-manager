@@ -14,4 +14,9 @@ export class RefresherController {
   async refreshFigures() {
     return await this.refresherService.refreshFigures();
   }
+
+  @Get('/images')
+  async refreshImages() {
+    return await this.refresherService.refreshImages();
+  }
 }

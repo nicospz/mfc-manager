@@ -17,9 +17,9 @@ app
       async (req: IncomingMessage, res: ServerResponse, next: () => void) => {
         if (
           req.url === '/graphql' ||
-          req.url === '/figures/scraper' ||
           req.url === '/refresh/cookies' ||
-          req.url === '/refresh/figures'
+          req.url === '/refresh/figures' ||
+          req.url === '/refresh/images'
         ) {
           next();
         } else {

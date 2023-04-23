@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { type CreateFigureInput } from '@server/src/modules/figures/dto/createFigureInput';
 import { Figure } from '@server/src/entities/figure.entity';
+import { UpdateFigureInput } from '@server/src/modules/figures/dto/updateFigureInput';
 
 @Injectable()
 export class FiguresService {
@@ -16,11 +17,36 @@ export class FiguresService {
     return await this.figuresRepository.save(figure);
   }
 
-  async findAll(findManyOptions?: FindManyOptions<Figure>): Promise<Figure[]> {
-    return await this.figuresRepository.find(findManyOptions);
+  async update(
+    id: number,
+    updateFigureInput: UpdateFigureInput,
+  ): Promise<Figure | null> {
+    const figure = await this.figuresRepository.findOne({
+      where: { id },
+    });
+    if (figure) {
+      return await this.figuresRepository.save({
+        ...figure,
+        ...updateFigureInput,
+      });
+    }
+    return null;
   }
 
-  async clear(): Promise<void> {
-    await this.figuresRepository.clear();
+  async createOrUpdate(createFigureInput: CreateFigureInput): Promise<Figure> {
+    const figure = await this.figuresRepository.findOne({
+      where: { id: createFigureInput.id },
+    });
+    if (figure) {
+      return await this.figuresRepository.save({
+        ...figure,
+        ...createFigureInput,
+      });
+    }
+    return await this.create(createFigureInput);
+  }
+
+  async findAll(findManyOptions?: FindManyOptions<Figure>): Promise<Figure[]> {
+    return await this.figuresRepository.find(findManyOptions);
   }
 }

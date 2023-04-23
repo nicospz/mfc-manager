@@ -45,6 +45,10 @@ export class Figure {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
+  imageUrl: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   releaseDate: Date;
 
   @Field({ nullable: true })

@@ -1,8 +1,13 @@
+import { PrimaryGeneratedColumn } from 'typeorm';
 import { InputType, Field } from '@nestjs/graphql';
 import { Status } from '@server/src/entities/figure.entity';
 
 @InputType()
 export class CreateFigureInput {
+  @Field()
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @Field()
   title: string;
 

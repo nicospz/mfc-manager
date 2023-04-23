@@ -136,16 +136,49 @@ export class RefresherService {
           const bDate = new Date(b.releaseDate);
           return aDate.getTime() - bDate.getTime();
         });
-      if (figures.length > 0) {
-        await this.figuresService.clear();
-        for (const figure of figures) {
-          await this.figuresService.create(figure);
-        }
+      for (const figure of figures) {
+        await this.figuresService.createOrUpdate({
+          id: figure.id,
+          title: figure.title,
+          price: figure.price,
+          status: figure.status,
+          shop: figure.shop,
+          releaseDate: figure.releaseDate,
+          paymentDate: figure.paymentDate,
+        });
       }
     } catch (e) {
       console.error(e);
     }
     console.timeEnd('Figures refreshed in: ');
+    return await this.figuresService.findAll();
+  }
+
+  async refreshImages() {
+    const browser = await startBrowser();
+    if (!browser) return [];
+    console.time('Images refreshed in: ');
+    const figures = await this.figuresService.findAll();
+    const length = figures.length;
+    let i = 0;
+    for (const figure of figures) {
+      if (figure.imageUrl) continue;
+      console.time(`${figure.title} image refreshed in: `);
+      // Scrape image
+      const page = await browser.newPage();
+      await page.goto(`https://myfigurecollection.net/item/${figure.id}`);
+      const img = await page.$('img.thumbnail');
+      if (img) {
+        const src = await page.evaluate((el: any) => el.src, img);
+        await this.figuresService.update(figure.id, { imageUrl: src });
+        console.timeEnd(`${figure.title} image refreshed in: `);
+        console.log(src);
+      }
+      i++;
+      console.log(`${i}/${length}`);
+    }
+    await browser.close();
+    console.timeEnd('Images refreshed in: ');
     return await this.figuresService.findAll();
   }
 }

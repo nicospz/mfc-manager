@@ -31,9 +31,10 @@ export type Scalars = {
 export type Figure = {
   __typename?: "Figure";
   id: Scalars["Float"];
+  imageUrl?: Maybe<Scalars["String"]>;
   paymentDate?: Maybe<Scalars["DateTime"]>;
   price: Scalars["Float"];
-  releaseDate: Scalars["DateTime"];
+  releaseDate?: Maybe<Scalars["DateTime"]>;
   shop: Scalars["String"];
   status: Status;
   title: Scalars["String"];
@@ -191,13 +192,18 @@ export type FigureResolvers<
   ParentType extends ResolversParentTypes["Figure"] = ResolversParentTypes["Figure"]
 > = {
   id?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
+  imageUrl?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   paymentDate?: Resolver<
     Maybe<ResolversTypes["DateTime"]>,
     ParentType,
     ContextType
   >;
   price?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
-  releaseDate?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
+  releaseDate?: Resolver<
+    Maybe<ResolversTypes["DateTime"]>,
+    ParentType,
+    ContextType
+  >;
   shop?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Status"], ParentType, ContextType>;
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -233,8 +239,9 @@ export type QueryOrderedFiguresQuery = {
     price: number;
     shop: string;
     status: Status;
-    releaseDate: any;
+    releaseDate?: any | null;
     paymentDate?: any | null;
+    imageUrl?: string | null;
   }>;
 };
 
@@ -248,6 +255,7 @@ export const QueryOrderedFiguresDocument = gql`
       status
       releaseDate
       paymentDate
+      imageUrl
     }
   }
 `;

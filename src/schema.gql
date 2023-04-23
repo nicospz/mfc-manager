@@ -12,6 +12,7 @@ type Figure {
   price: Float!
   shop: String!
   status: Status!
+  imageUrl: String
   releaseDate: DateTime
   paymentDate: DateTime
 }
