@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React from "react";
 import format from "date-fns/format";
-import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar, faHeart, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type Figure as FigureType } from "@graphql-types";
 import { formatPrice } from "@lib/format";
@@ -12,8 +12,10 @@ interface FigureProps {
   title: FigureType["title"];
   releaseDate?: FigureType["releaseDate"];
   paymentDate?: FigureType["paymentDate"];
-  price: FigureType["price"];
+  price?: FigureType["price"];
   imageUrl?: FigureType["imageUrl"];
+  wishability?: FigureType["wishability"];
+  score?: FigureType["score"];
 }
 
 const Figure: React.FC<FigureProps> = ({
@@ -23,6 +25,8 @@ const Figure: React.FC<FigureProps> = ({
   releaseDate,
   price,
   imageUrl,
+  wishability,
+  score,
 }) => {
   return (
     <a
@@ -37,16 +41,34 @@ const Figure: React.FC<FigureProps> = ({
       {imageUrl && (
         <img alt={title} src={imageUrl} className="h-full rounded-md" />
       )}
-      <div className="flex flex-col justify-between">
+      <div className="flex flex-col justify-between w-full">
         <span className="line-clamp-2">{title}</span>
-        <div className="flex gap-2">
-          <span className="flex items-center gap-1">
-            <>
+        <div className="flex items-center justify-between">
+          <div className="flex gap-2">
+            <span className="flex items-center gap-1">
               <FontAwesomeIcon icon={faCalendar} />
               {format(new Date(releaseDate), "yyyy-MM-dd")}
-            </>
-          </span>
-          <span className="flex items-center">{formatPrice(price)}</span>
+            </span>
+            {!!price && price !== 0 && (
+              <span className="flex items-center">{formatPrice(price)}</span>
+            )}
+          </div>
+          <div>
+            {wishability !== undefined && wishability !== null && (
+              <span className="flex items-center">
+                {Array.from(Array(wishability)).map((i) => (
+                  <FontAwesomeIcon key={i} icon={faHeart} />
+                ))}
+              </span>
+            )}
+            {score !== undefined && score !== null && (
+              <span className="flex items-center">
+                {Array.from(Array(score)).map((i) => (
+                  <FontAwesomeIcon key={i} icon={faStar} />
+                ))}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </a>

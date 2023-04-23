@@ -57,9 +57,9 @@ export class RefresherService {
         await this.cookiesService.create({
           name: cookie.name,
           value: cookie.value,
-          domain: cookie.domain || '',
-          path: cookie.path || '',
-          expiresAt: new Date(cookie.expires || ''),
+          domain: cookie.domain ?? '',
+          path: cookie.path ?? '',
+          expiresAt: new Date(cookie.expires ?? ''),
           updatedAt: new Date(),
         });
       }
@@ -125,6 +125,7 @@ export class RefresherService {
 
       const figures = jsonArray
         .map((element) => {
+          console.log(element);
           const paymentDate = processDate(element['Payment date']);
           const releaseDate = processDate(element['Release Date']);
           const figure = {
@@ -135,6 +136,9 @@ export class RefresherService {
             shop: element.Shop,
             releaseDate,
             paymentDate,
+            score: element.Score === '' ? 0 : parseInt(element.Score),
+            wishability:
+              element.Wishability === '' ? 0 : parseInt(element.Wishability),
           };
           return figure;
         })
@@ -155,6 +159,8 @@ export class RefresherService {
           shop: figure.shop,
           releaseDate: figure.releaseDate,
           paymentDate: figure.paymentDate,
+          score: figure.score,
+          wishability: figure.wishability,
         });
       }
     } catch (e) {

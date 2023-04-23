@@ -4,4 +4,7 @@ import { InputType, Field } from '@nestjs/graphql';
 export class UpdateFigureInput {
   @Field()
   imageUrl?: string;
+
+  @Field()
+  score?: number;
 }

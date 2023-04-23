@@ -7,14 +7,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "@components/Button";
-import { useQueryOrderedFiguresQuery } from "@graphql-types";
+import { useOrderedFiguresQuery } from "@graphql-types";
 import { getMonthlySums } from "@components/OrderedFigures/utils";
 import { formatPrice } from "@lib/format";
 import Figure from "@components/Figure";
 import Chart from "@components/OrderedFigures/Chart";
 
 const OrderedFigures: React.FC = () => {
-  const { loading, data } = useQueryOrderedFiguresQuery({ ssr: true });
+  const { loading, data } = useOrderedFiguresQuery({ ssr: true });
   const figures = data?.figures ?? [];
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
@@ -107,7 +107,7 @@ const OrderedFigures: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center flex-1 w-full gap-2 px-5 py-4">
+    <div className="flex flex-col items-center flex-1 w-full gap-2">
       <div className="flex items-center gap-2">
         {/* Icon to decrement month */}
         <Button disabled={isHandlePrevDisabled} onClick={handlePrevMonth}>

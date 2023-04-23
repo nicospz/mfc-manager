@@ -35,9 +35,11 @@ export type Figure = {
   paymentDate?: Maybe<Scalars["DateTime"]>;
   price: Scalars["Float"];
   releaseDate?: Maybe<Scalars["DateTime"]>;
+  score?: Maybe<Scalars["Float"]>;
   shop: Scalars["String"];
   status: Status;
   title: Scalars["String"];
+  wishability?: Maybe<Scalars["Float"]>;
 };
 
 export type Query = {
@@ -204,9 +206,15 @@ export type FigureResolvers<
     ParentType,
     ContextType
   >;
+  score?: Resolver<Maybe<ResolversTypes["Float"]>, ParentType, ContextType>;
   shop?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Status"], ParentType, ContextType>;
   title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  wishability?: Resolver<
+    Maybe<ResolversTypes["Float"]>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -228,9 +236,9 @@ export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
 };
 
-export type QueryOrderedFiguresQueryVariables = Exact<{ [key: string]: never }>;
+export type OrderedFiguresQueryVariables = Exact<{ [key: string]: never }>;
 
-export type QueryOrderedFiguresQuery = {
+export type OrderedFiguresQuery = {
   __typename?: "Query";
   figures: Array<{
     __typename?: "Figure";
@@ -245,8 +253,44 @@ export type QueryOrderedFiguresQuery = {
   }>;
 };
 
-export const QueryOrderedFiguresDocument = gql`
-  query queryOrderedFigures {
+export type OwnedFiguresQueryVariables = Exact<{ [key: string]: never }>;
+
+export type OwnedFiguresQuery = {
+  __typename?: "Query";
+  figures: Array<{
+    __typename?: "Figure";
+    id: number;
+    title: string;
+    price: number;
+    shop: string;
+    status: Status;
+    releaseDate?: any | null;
+    paymentDate?: any | null;
+    imageUrl?: string | null;
+    score?: number | null;
+  }>;
+};
+
+export type WishedFiguresQueryVariables = Exact<{ [key: string]: never }>;
+
+export type WishedFiguresQuery = {
+  __typename?: "Query";
+  figures: Array<{
+    __typename?: "Figure";
+    id: number;
+    title: string;
+    price: number;
+    shop: string;
+    status: Status;
+    releaseDate?: any | null;
+    paymentDate?: any | null;
+    imageUrl?: string | null;
+    wishability?: number | null;
+  }>;
+};
+
+export const OrderedFiguresDocument = gql`
+  query orderedFigures {
     figures(status: "Ordered") {
       id
       title
@@ -261,51 +305,181 @@ export const QueryOrderedFiguresDocument = gql`
 `;
 
 /**
- * __useQueryOrderedFiguresQuery__
+ * __useOrderedFiguresQuery__
  *
- * To run a query within a React component, call `useQueryOrderedFiguresQuery` and pass it any options that fit your needs.
- * When your component renders, `useQueryOrderedFiguresQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useOrderedFiguresQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrderedFiguresQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useQueryOrderedFiguresQuery({
+ * const { data, loading, error } = useOrderedFiguresQuery({
  *   variables: {
  *   },
  * });
  */
-export function useQueryOrderedFiguresQuery(
+export function useOrderedFiguresQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    QueryOrderedFiguresQuery,
-    QueryOrderedFiguresQueryVariables
+    OrderedFiguresQuery,
+    OrderedFiguresQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    QueryOrderedFiguresQuery,
-    QueryOrderedFiguresQueryVariables
-  >(QueryOrderedFiguresDocument, options);
+  return Apollo.useQuery<OrderedFiguresQuery, OrderedFiguresQueryVariables>(
+    OrderedFiguresDocument,
+    options
+  );
 }
-export function useQueryOrderedFiguresLazyQuery(
+export function useOrderedFiguresLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    QueryOrderedFiguresQuery,
-    QueryOrderedFiguresQueryVariables
+    OrderedFiguresQuery,
+    OrderedFiguresQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    QueryOrderedFiguresQuery,
-    QueryOrderedFiguresQueryVariables
-  >(QueryOrderedFiguresDocument, options);
+  return Apollo.useLazyQuery<OrderedFiguresQuery, OrderedFiguresQueryVariables>(
+    OrderedFiguresDocument,
+    options
+  );
 }
-export type QueryOrderedFiguresQueryHookResult = ReturnType<
-  typeof useQueryOrderedFiguresQuery
+export type OrderedFiguresQueryHookResult = ReturnType<
+  typeof useOrderedFiguresQuery
 >;
-export type QueryOrderedFiguresLazyQueryHookResult = ReturnType<
-  typeof useQueryOrderedFiguresLazyQuery
+export type OrderedFiguresLazyQueryHookResult = ReturnType<
+  typeof useOrderedFiguresLazyQuery
 >;
-export type QueryOrderedFiguresQueryResult = Apollo.QueryResult<
-  QueryOrderedFiguresQuery,
-  QueryOrderedFiguresQueryVariables
+export type OrderedFiguresQueryResult = Apollo.QueryResult<
+  OrderedFiguresQuery,
+  OrderedFiguresQueryVariables
+>;
+export const OwnedFiguresDocument = gql`
+  query ownedFigures {
+    figures(status: "Owned") {
+      id
+      title
+      price
+      shop
+      status
+      releaseDate
+      paymentDate
+      imageUrl
+      score
+    }
+  }
+`;
+
+/**
+ * __useOwnedFiguresQuery__
+ *
+ * To run a query within a React component, call `useOwnedFiguresQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOwnedFiguresQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOwnedFiguresQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOwnedFiguresQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    OwnedFiguresQuery,
+    OwnedFiguresQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OwnedFiguresQuery, OwnedFiguresQueryVariables>(
+    OwnedFiguresDocument,
+    options
+  );
+}
+export function useOwnedFiguresLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    OwnedFiguresQuery,
+    OwnedFiguresQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OwnedFiguresQuery, OwnedFiguresQueryVariables>(
+    OwnedFiguresDocument,
+    options
+  );
+}
+export type OwnedFiguresQueryHookResult = ReturnType<
+  typeof useOwnedFiguresQuery
+>;
+export type OwnedFiguresLazyQueryHookResult = ReturnType<
+  typeof useOwnedFiguresLazyQuery
+>;
+export type OwnedFiguresQueryResult = Apollo.QueryResult<
+  OwnedFiguresQuery,
+  OwnedFiguresQueryVariables
+>;
+export const WishedFiguresDocument = gql`
+  query wishedFigures {
+    figures(status: "Wished") {
+      id
+      title
+      price
+      shop
+      status
+      releaseDate
+      paymentDate
+      imageUrl
+      wishability
+    }
+  }
+`;
+
+/**
+ * __useWishedFiguresQuery__
+ *
+ * To run a query within a React component, call `useWishedFiguresQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWishedFiguresQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWishedFiguresQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useWishedFiguresQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    WishedFiguresQuery,
+    WishedFiguresQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<WishedFiguresQuery, WishedFiguresQueryVariables>(
+    WishedFiguresDocument,
+    options
+  );
+}
+export function useWishedFiguresLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    WishedFiguresQuery,
+    WishedFiguresQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<WishedFiguresQuery, WishedFiguresQueryVariables>(
+    WishedFiguresDocument,
+    options
+  );
+}
+export type WishedFiguresQueryHookResult = ReturnType<
+  typeof useWishedFiguresQuery
+>;
+export type WishedFiguresLazyQueryHookResult = ReturnType<
+  typeof useWishedFiguresLazyQuery
+>;
+export type WishedFiguresQueryResult = Apollo.QueryResult<
+  WishedFiguresQuery,
+  WishedFiguresQueryVariables
 >;

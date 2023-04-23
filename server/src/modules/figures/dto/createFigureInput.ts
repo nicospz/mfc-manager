@@ -25,4 +25,10 @@ export class CreateFigureInput {
 
   @Field({ nullable: true })
   paymentDate?: Date;
+
+  @Field({ nullable: true })
+  score?: number;
+
+  @Field({ nullable: true })
+  wishability?: number;
 }

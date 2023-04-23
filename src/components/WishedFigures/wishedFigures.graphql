@@ -1,5 +1,5 @@
-query orderedFigures {
-  figures(status: "Ordered") {
+query wishedFigures {
+  figures(status: "Wished") {
     id
     title
     price
@@ -8,5 +8,6 @@ query orderedFigures {
     releaseDate
     paymentDate
     imageUrl
+    wishability
   }
 }

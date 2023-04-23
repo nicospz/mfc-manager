@@ -1,7 +1,7 @@
 import OrderedFigures from "@components/OrderedFigures";
 import {
-  QueryOrderedFiguresDocument,
-  type QueryOrderedFiguresQuery,
+  OrderedFiguresDocument,
+  type OrderedFiguresQuery,
 } from "@graphql-types";
 import { addApolloState, initializeApollo } from "@lib/apolloClient";
 
@@ -13,8 +13,8 @@ export default OrderedFiguresPage;
 
 export async function getServerSideProps() {
   const apolloClient = initializeApollo();
-  await apolloClient.query<QueryOrderedFiguresQuery>({
-    query: QueryOrderedFiguresDocument,
+  await apolloClient.query<OrderedFiguresQuery>({
+    query: OrderedFiguresDocument,
   });
 
   return addApolloState(apolloClient, {
