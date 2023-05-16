@@ -17,8 +17,8 @@
     "lint": "eslint ./",
     "prettier": "prettier --write ./src",
     "codegen": "graphql-codegen --config codegen.ts && prettier --write ./src/graphql-types.ts",
-    "migration:generate": "pnpm build:server && npx typeorm migration:generate -d dist/data-source.js",
-    "migration:run": "pnpm build:server && npx typeorm migration:run -d dist/data-source.js"
+    "migration:generate": "npx typeorm migration:generate -d dist/data-source.js",
+    "migration:run": "npx typeorm migration:run -d dist/data-source.js"
   },
   "dependencies": {
     "@apollo/client": "^3.7.5",

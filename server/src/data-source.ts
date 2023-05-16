@@ -6,7 +6,7 @@ const devConfig: DataSourceOptions = {
   type: 'sqlite',
   database: process.env.DATABASE_URL
     ? process.env.DATABASE_URL
-    : './config/db/db.sqlite3',
+    : './data/db.sqlite3',
   synchronize: false,
   migrationsRun: true,
   logging: false,
@@ -20,9 +20,9 @@ const prodConfig: DataSourceOptions = {
   type: 'sqlite',
   database: process.env.DATABASE_URL
     ? process.env.DATABASE_URL
-    : 'config/db/db.sqlite3',
+    : '/data/db.sqlite3',
   synchronize: false,
-  migrationsRun: true,
+  migrationsRun: false,
   logging: false,
   enableWAL: true,
   entities: ['dist/entities/**/*{.js,.ts}'],
