@@ -202,6 +202,8 @@ export class RefresherService {
 
         await this.figuresService.update(figure.id, { imageUrl: result.secure_url });
         console.timeEnd(`${figure.title} image refreshed in: `);
+      } else {
+        console.log(`Could not find image for ${figure.id} -${figure.title}`);
       }
       i++;
       console.log(`${i}/${length}`);
@@ -210,37 +212,19 @@ export class RefresherService {
     return await this.figuresService.findAll();
   }
 
-  async refreshAllImages() {
-    console.time('All images refreshed in: ');
+  async clearImages() {
+    console.time('All images cleared in: ');
     const figures = await this.figuresService.findAll();
     const length = figures.length;
     let i = 0;
     for (const figure of figures) {
-      console.time(`${figure.title} image refreshed in: `);
-      const response = await fetch(
-        `https://myfigurecollection.net/item/${figure.id}`,
-      );
-      const html = await response.text();
-      const $ = load(html);
-      const src = $('img.thumbnail').attr('src');
-      if (src) {
-        cloudinary.config({
-          cloud_name: process.env.CLOUDINARY_CLOUD_NAME as string,
-          api_key: process.env.CLOUDINARY_API_KEY as string,
-          api_secret: process.env.CLOUDINARY_API_SECRET as string,
-        });
-        const result = await cloudinary.uploader.upload(src, {
-          folder: process.env.NODE_ENV === 'development' ? 'mfc/dev/thumbnails' : 'mfc/thumbnails',
-        }); 
-        console.log(result.secure_url);
-
-        await this.figuresService.update(figure.id, { imageUrl: result.secure_url });
-        console.timeEnd(`${figure.title} image refreshed in: `);
-      }
+      console.time(`${figure.title} image cleared in: `);
+      await this.figuresService.update(figure.id, { imageUrl: null });
+      console.timeEnd(`${figure.title} image cleared in: `);
       i++;
       console.log(`${i}/${length}`);
     }
-    console.timeEnd('All images refreshed in: ');
+    console.timeEnd('All images cleared in: ');
     return await this.figuresService.findAll();
   }
 }

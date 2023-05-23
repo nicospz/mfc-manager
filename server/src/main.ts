@@ -20,7 +20,7 @@ app
           req.url === '/refresh/cookies' ||
           req.url === '/refresh/figures' ||
           req.url === '/refresh/images' || 
-          req.url === '/refresh/allimages'
+          req.url === '/refresh/clearimages'
         ) {
           next();
         } else {

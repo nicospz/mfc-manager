@@ -22,44 +22,44 @@ registerEnumType(Status, {
 export class Figure {
   @Field()
   @PrimaryGeneratedColumn()
-  id: number;
+    id: number;
 
   @Field()
   @Column()
-  title: string;
+    title: string;
 
   @Field()
   @Column()
-  price: number;
+    price: number;
 
   @Field()
   @Column()
-  shop: string;
+    shop: string;
 
   @Field(() => Status)
   @Column({
     type: 'simple-enum',
     enum: Status,
   })
-  status: Status;
+    status: Status;
+
+  @Field(() => String, { nullable: true })
+  @Column({ type: 'text', nullable: true })
+    imageUrl: string | null;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  imageUrl: string;
+    releaseDate: Date;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  releaseDate: Date;
+    paymentDate: Date;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  paymentDate: Date;
+    score: number;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  score: number;
-
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  wishability: number;
+    wishability: number;
 }
