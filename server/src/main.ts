@@ -19,7 +19,8 @@ app
           req.url === '/graphql' ||
           req.url === '/refresh/cookies' ||
           req.url === '/refresh/figures' ||
-          req.url === '/refresh/images'
+          req.url === '/refresh/images' || 
+          req.url === '/refresh/allimages'
         ) {
           next();
         } else {

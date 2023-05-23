@@ -2,6 +2,7 @@ import { createWriteStream, readdirSync, unlink } from 'fs';
 import fetch from 'node-fetch';
 import { load } from 'cheerio';
 import setCookie from 'set-cookie-parser';
+import { v2 as cloudinary } from 'cloudinary';
 import { Injectable } from '@nestjs/common';
 import { CookiesService } from '@server/src/modules/cookies/cookies.service';
 import { FiguresService } from '@server/src/modules/figures/figures.service';
@@ -151,6 +152,7 @@ export class RefresherService {
           return aDate.getTime() - bDate.getTime();
         });
       for (const figure of figures) {
+
         await this.figuresService.createOrUpdate({
           id: figure.id,
           title: figure.title,
@@ -176,7 +178,10 @@ export class RefresherService {
     const length = figures.length;
     let i = 0;
     for (const figure of figures) {
-      if (figure.imageUrl) continue;
+      if (figure.imageUrl) {
+        console.log(`${i++}/${length} - ${figure.title} already has an image`);
+        continue;
+      };
       console.time(`${figure.title} image refreshed in: `);
       const response = await fetch(
         `https://myfigurecollection.net/item/${figure.id}`,
@@ -185,14 +190,57 @@ export class RefresherService {
       const $ = load(html);
       const src = $('img.thumbnail').attr('src');
       if (src) {
-        await this.figuresService.update(figure.id, { imageUrl: src });
+        cloudinary.config({
+          cloud_name: process.env.CLOUDINARY_CLOUD_NAME as string,
+          api_key: process.env.CLOUDINARY_API_KEY as string,
+          api_secret: process.env.CLOUDINARY_API_SECRET as string,
+        });
+        const result = await cloudinary.uploader.upload(src, {
+          folder: process.env.NODE_ENV === 'production' ? 'mfc/thumbnails' : 'mfc/dev/thumbnails',
+        }); 
+        console.log(result.secure_url);
+
+        await this.figuresService.update(figure.id, { imageUrl: result.secure_url });
         console.timeEnd(`${figure.title} image refreshed in: `);
-        console.log(src);
       }
       i++;
       console.log(`${i}/${length}`);
     }
     console.timeEnd('Images refreshed in: ');
+    return await this.figuresService.findAll();
+  }
+
+  async refreshAllImages() {
+    console.time('All images refreshed in: ');
+    const figures = await this.figuresService.findAll();
+    const length = figures.length;
+    let i = 0;
+    for (const figure of figures) {
+      console.time(`${figure.title} image refreshed in: `);
+      const response = await fetch(
+        `https://myfigurecollection.net/item/${figure.id}`,
+      );
+      const html = await response.text();
+      const $ = load(html);
+      const src = $('img.thumbnail').attr('src');
+      if (src) {
+        cloudinary.config({
+          cloud_name: process.env.CLOUDINARY_CLOUD_NAME as string,
+          api_key: process.env.CLOUDINARY_API_KEY as string,
+          api_secret: process.env.CLOUDINARY_API_SECRET as string,
+        });
+        const result = await cloudinary.uploader.upload(src, {
+          folder: process.env.NODE_ENV === 'development' ? 'mfc/dev/thumbnails' : 'mfc/thumbnails',
+        }); 
+        console.log(result.secure_url);
+
+        await this.figuresService.update(figure.id, { imageUrl: result.secure_url });
+        console.timeEnd(`${figure.title} image refreshed in: `);
+      }
+      i++;
+      console.log(`${i}/${length}`);
+    }
+    console.timeEnd('All images refreshed in: ');
     return await this.figuresService.findAll();
   }
 }
