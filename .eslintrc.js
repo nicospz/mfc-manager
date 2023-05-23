@@ -9,7 +9,10 @@ module.exports = {
     "standard-with-typescript",
     "plugin:import/recommended",
     "plugin:import/typescript",
-    "prettier",
+    "plugin:storybook/recommended",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
   ],
   overrides: [],
   parserOptions: {
@@ -18,6 +21,9 @@ module.exports = {
     sourceType: "module",
     project: ["./tsconfig.json"],
     tsconfigRootDir: "./",
+    "ecmaFeatures": {
+      "jsx": true
+    },
   },
   plugins: ["react", "unused-imports", "@typescript-eslint", "import"],
   rules: {
@@ -48,6 +54,8 @@ module.exports = {
     "@typescript-eslint/consistent-type-imports": "off",
     "@next/next/no-img-element": "off",
     "import/no-named-as-default-member": "off",
+    "no-multiple-empty-lines": ["error", { max: 1, maxEOF: 1 }],
+    "indent": ["error", 2]
   },
   settings: {
     react: {
