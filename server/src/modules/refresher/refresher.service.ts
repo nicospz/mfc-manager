@@ -118,15 +118,15 @@ export class RefresherService {
       if (csvFile) {
         // convert csv to json
         const csvFilePath = `./${csvFile}`;
-        jsonArray = (await csvtojson().fromFile(csvFilePath)) as any[];
+        jsonArray = await csvtojson().fromFile(csvFilePath);
         // remove csv file
-        unlink(csvFilePath, (err: any) => {
+        unlink(csvFilePath, (err: NodeJS.ErrnoException | null) => {
           if (err) console.error(err);
         });
       }
 
       const figures = jsonArray
-        .map((element) => {
+        .map((element: Record<string, string>) => {
           const paymentDate = processDate(element['Payment date']);
           const releaseDate = processDate(element['Release Date']);
           const figure = {
@@ -144,7 +144,7 @@ export class RefresherService {
           return figure;
         })
         // order by release date
-        .sort((a, b) => {
+        .sort((a: { releaseDate?: string }, b: { releaseDate?: string }) => {
           if (!a.releaseDate) return -1;
           if (!b.releaseDate) return 1;
           const aDate = new Date(a.releaseDate);

@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 import merge from "deepmerge";
 import isEqual from "lodash/isEqual";
-import { ApolloClient, HttpLink, InMemoryCache, from } from "@apollo/client";
+import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject, from } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { concatPagination } from "@apollo/client/utilities";
 
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
-let apolloClient: ApolloClient<any>;
+let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
@@ -75,10 +75,12 @@ export function initializeApollo(initialState = null) {
 }
 
 interface PageProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   props: { [APOLLO_STATE_PROP_NAME]?: any };
 }
 
 export function addApolloState(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   client: ApolloClient<any>,
   pageProps: PageProps
 ) {
