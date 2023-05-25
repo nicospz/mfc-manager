@@ -11,18 +11,18 @@ import { RefresherService } from '@server/src/modules/refresher/refresher.servic
 import { RefresherJobsService } from '@server/src/modules/refresher/refresherJobs.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Figure]),
-    FiguresModule,
-    TypeOrmModule.forFeature([Cookie]),
-    CookiesModule,
-  ],
-  controllers: [RefresherController],
-  providers: [
-    RefresherService,
-    FiguresService,
-    CookiesService,
-    RefresherJobsService,
-  ],
+    imports: [
+        TypeOrmModule.forFeature([Figure]),
+        FiguresModule,
+        TypeOrmModule.forFeature([Cookie]),
+        CookiesModule,
+    ],
+    controllers: [RefresherController],
+    providers: [
+        RefresherService,
+        FiguresService,
+        CookiesService,
+        RefresherJobsService,
+    ],
 })
 export class RefresherModule {}

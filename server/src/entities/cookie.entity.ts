@@ -1,35 +1,21 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Entity } from 'typeorm';
+import { InputType, ObjectType } from '@nestjs/graphql';
 
 @Entity()
 @ObjectType({ isAbstract: true })
 @InputType({ isAbstract: true })
 export class Cookie {
-  @Field()
-  @PrimaryGeneratedColumn()
-  id: number;
+    id: number;
 
-  @Field()
-  @Column()
-  name: string;
+    name: string;
 
-  @Field()
-  @Column()
-  value: string;
+    value: string;
 
-  @Field()
-  @Column()
-  domain: string;
+    domain: string;
 
-  @Field()
-  @Column()
-  path: string;
+    path: string;
 
-  @Field()
-  @Column()
-  expiresAt: Date;
+    expiresAt: Date;
 
-  @Field()
-  @Column()
-  updatedAt: Date;
+    updatedAt: Date;
 }

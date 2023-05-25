@@ -4,9 +4,9 @@
 
 html,
 body {
-  @apply flex items-center justify-center w-full h-full bg-gray-50 dark:bg-gray-900;
+    @apply flex items-center justify-center w-full h-full bg-gray-50 dark:bg-gray-900;
 }
 
 #__next {
-  @apply flex flex-col w-full h-full max-w-screen-lg text-base leading-normal tracking-normal text-gray-600;
+    @apply flex flex-col w-full h-full max-w-screen-lg text-base leading-normal tracking-normal text-gray-600;
 }

@@ -1,13 +1,13 @@
 query ownedFigures {
-  figures(status: "Owned") {
-    id
-    title
-    price
-    shop
-    status
-    releaseDate
-    paymentDate
-    imageUrl
-    score
-  }
+    figures(status: "Owned") {
+        id
+        title
+        price
+        shop
+        status
+        releaseDate
+        paymentDate
+        imageUrl
+        score
+    }
 }

@@ -1,22 +1,16 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateCookieInput {
-  @Field()
-  name: string;
+    name: string;
 
-  @Field()
-  value: string;
+    value: string;
 
-  @Field()
-  domain: string;
+    domain: string;
 
-  @Field()
-  path: string;
+    path: string;
 
-  @Field()
-  expiresAt: Date;
+    expiresAt: Date;
 
-  @Field()
-  updatedAt: Date;
+    updatedAt: Date;
 }

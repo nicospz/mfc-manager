@@ -1,13 +1,13 @@
 query wishedFigures {
-  figures(status: "Wished") {
-    id
-    title
-    price
-    shop
-    status
-    releaseDate
-    paymentDate
-    imageUrl
-    wishability
-  }
+    figures(status: "Wished") {
+        id
+        title
+        price
+        shop
+        status
+        releaseDate
+        paymentDate
+        imageUrl
+        wishability
+    }
 }
