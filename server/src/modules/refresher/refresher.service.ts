@@ -8,7 +8,7 @@ import { type CookiesService } from '@server/src/modules/cookies/cookies.service
 import { type FiguresService } from '@server/src/modules/figures/figures.service';
 import { type Cookie } from '@server/src/entities/cookie.entity';
 import { processDate } from '@server/src/lib/format';
-import { type Status } from '@server/src/entities/figure.entity';
+import { Status } from '@server/src/entities/figure.entity';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const csvtojson = require('csvtojson');
 
@@ -161,18 +161,32 @@ export class RefresherService {
                         return aDate.getTime() - bDate.getTime();
                     }
                 );
+            const existingFigures = await this.figuresService.findAll();
+            const figuresMap = new Map(
+                existingFigures.map((figure) => [figure.id, figure])
+            );
             for (const figure of figures) {
-                await this.figuresService.createOrUpdate({
-                    id: figure.id,
-                    title: figure.title,
-                    price: figure.price,
-                    status: figure.status,
-                    shop: figure.shop,
-                    releaseDate: figure.releaseDate,
-                    paymentDate: figure.paymentDate,
-                    score: figure.score,
-                    wishability: figure.wishability,
-                });
+                if (figure.status === Status.DELETED) {
+                    await this.figuresService.delete(figure.id);
+                    console.log(`Deleted ${figure.title}`);
+                } else {
+                    await this.figuresService.createOrUpdate({
+                        id: figure.id,
+                        title: figure.title,
+                        price: figure.price,
+                        status: figure.status,
+                        shop: figure.shop,
+                        releaseDate: figure.releaseDate,
+                        paymentDate: figure.paymentDate,
+                        score: figure.score,
+                        wishability: figure.wishability,
+                    });
+                }
+                figuresMap.delete(figure.id);
+            }
+            for (const figure of figuresMap.values()) {
+                await this.figuresService.delete(figure.id);
+                console.log(`Deleted ${figure.title}`);
             }
         } catch (e) {
             console.error(e);

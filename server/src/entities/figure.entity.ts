@@ -5,6 +5,7 @@ export enum Status {
     ORDERED = 'Ordered',
     OWNED = 'Owned',
     WISHED = 'Wished',
+    DELETED = 'Deleted',
 }
 registerEnumType(Status, {
     name: 'Status',

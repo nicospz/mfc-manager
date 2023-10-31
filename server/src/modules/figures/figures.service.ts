@@ -53,4 +53,15 @@ export class FiguresService {
     ): Promise<Figure[]> {
         return await this.figuresRepository.find(findManyOptions);
     }
+
+    async delete(id: number): Promise<Figure | null> {
+        const figure = await this.figuresRepository.findOne({
+            where: { id },
+        });
+        if (figure != null) {
+            await this.figuresRepository.remove(figure);
+            return figure;
+        }
+        return null;
+    }
 }
