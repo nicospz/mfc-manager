@@ -8,7 +8,7 @@ import { type CookiesService } from '@server/src/modules/cookies/cookies.service
 import { type FiguresService } from '@server/src/modules/figures/figures.service';
 import { type Cookie } from '@server/src/entities/cookie.entity';
 import { processDate } from '@server/src/lib/format';
-import { Status } from '@server/src/entities/figure.entity';
+import { Figure, Status } from '@server/src/entities/figure.entity';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const csvtojson = require('csvtojson');
 
@@ -160,7 +160,7 @@ export class RefresherService {
                         const bDate = new Date(b.releaseDate);
                         return aDate.getTime() - bDate.getTime();
                     }
-                );
+                ) as Figure[];
             const existingFigures = await this.figuresService.findAll();
             const figuresMap = new Map(
                 existingFigures.map((figure) => [figure.id, figure])
