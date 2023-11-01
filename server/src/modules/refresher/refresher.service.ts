@@ -4,8 +4,8 @@ import { load } from 'cheerio';
 import { parse, Cookie as CookieType } from 'set-cookie-parser';
 import { v2 as cloudinary } from 'cloudinary';
 import { Injectable } from '@nestjs/common';
-import { type CookiesService } from '@server/src/modules/cookies/cookies.service';
-import { type FiguresService } from '@server/src/modules/figures/figures.service';
+import { CookiesService } from '@server/src/modules/cookies/cookies.service';
+import { FiguresService } from '@server/src/modules/figures/figures.service';
 import { type Cookie } from '@server/src/entities/cookie.entity';
 import { processDate } from '@server/src/lib/format';
 import { Figure, Status } from '@server/src/entities/figure.entity';
@@ -176,11 +176,12 @@ export class RefresherService {
                         price: figure.price,
                         status: figure.status,
                         shop: figure.shop,
-                        releaseDate: figure.releaseDate,
-                        paymentDate: figure.paymentDate,
+                        releaseDate: figure.releaseDate ?? undefined,
+                        paymentDate: figure.paymentDate ?? undefined,
                         score: figure.score,
                         wishability: figure.wishability,
                     });
+                    console.log(`Created or updated ${figure.title}`);
                 }
                 figuresMap.delete(figure.id);
             }

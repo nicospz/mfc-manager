@@ -9,8 +9,11 @@ export const processDate = (date: string) => {
     if (month === 0 && day === 0) {
         return undefined;
     }
+    let processedDate;
     if (day === 0) {
-        return new Date(year, month - 1, 28);
+        processedDate = new Date(Date.UTC(year, month - 1, 28));
+    } else {
+        processedDate = new Date(Date.UTC(year, month - 1, day));
     }
-    return new Date(year, month - 1, day);
+    return processedDate;
 };

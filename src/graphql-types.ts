@@ -17,6 +17,9 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
     [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
+    [P in K]-?: NonNullable<T[P]>;
+};
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -30,16 +33,16 @@ export type Scalars = {
 
 export type Figure = {
     __typename?: 'Figure';
-    id: Scalars['Float'];
+    id: Scalars['ID'];
     imageUrl?: Maybe<Scalars['String']>;
     paymentDate?: Maybe<Scalars['DateTime']>;
     price: Scalars['Float'];
     releaseDate?: Maybe<Scalars['DateTime']>;
-    score?: Maybe<Scalars['Float']>;
+    score: Scalars['Float'];
     shop: Scalars['String'];
     status: Status;
     title: Scalars['String'];
-    wishability?: Maybe<Scalars['Float']>;
+    wishability: Scalars['Float'];
 };
 
 export type Query = {
@@ -48,11 +51,12 @@ export type Query = {
 };
 
 export type QueryFiguresArgs = {
-    status?: InputMaybe<Scalars['String']>;
+    status: Status;
 };
 
 /** Status of the figure. */
 export enum Status {
+    Deleted = 'DELETED',
     Ordered = 'ORDERED',
     Owned = 'OWNED',
     Wished = 'WISHED',
@@ -169,6 +173,7 @@ export type ResolversTypes = {
     DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
     Figure: ResolverTypeWrapper<Figure>;
     Float: ResolverTypeWrapper<Scalars['Float']>;
+    ID: ResolverTypeWrapper<Scalars['ID']>;
     Query: ResolverTypeWrapper<{}>;
     Status: Status;
     String: ResolverTypeWrapper<Scalars['String']>;
@@ -180,6 +185,7 @@ export type ResolversParentTypes = {
     DateTime: Scalars['DateTime'];
     Figure: Figure;
     Float: Scalars['Float'];
+    ID: Scalars['ID'];
     Query: {};
     String: Scalars['String'];
 };
@@ -193,7 +199,7 @@ export type FigureResolvers<
     ContextType = any,
     ParentType extends ResolversParentTypes['Figure'] = ResolversParentTypes['Figure']
 > = {
-    id?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+    id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
     imageUrl?: Resolver<
         Maybe<ResolversTypes['String']>,
         ParentType,
@@ -210,15 +216,11 @@ export type FigureResolvers<
         ParentType,
         ContextType
     >;
-    score?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+    score?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
     shop?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
     status?: Resolver<ResolversTypes['Status'], ParentType, ContextType>;
     title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-    wishability?: Resolver<
-        Maybe<ResolversTypes['Float']>,
-        ParentType,
-        ContextType
-    >;
+    wishability?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
     __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -230,7 +232,7 @@ export type QueryResolvers<
         Array<ResolversTypes['Figure']>,
         ParentType,
         ContextType,
-        Partial<QueryFiguresArgs>
+        RequireFields<QueryFiguresArgs, 'status'>
     >;
 };
 
@@ -246,7 +248,7 @@ export type OrderedFiguresQuery = {
     __typename?: 'Query';
     figures: Array<{
         __typename?: 'Figure';
-        id: number;
+        id: string;
         title: string;
         price: number;
         shop: string;
@@ -254,6 +256,8 @@ export type OrderedFiguresQuery = {
         releaseDate?: any | null;
         paymentDate?: any | null;
         imageUrl?: string | null;
+        score: number;
+        wishability: number;
     }>;
 };
 
@@ -263,7 +267,7 @@ export type OwnedFiguresQuery = {
     __typename?: 'Query';
     figures: Array<{
         __typename?: 'Figure';
-        id: number;
+        id: string;
         title: string;
         price: number;
         shop: string;
@@ -271,7 +275,7 @@ export type OwnedFiguresQuery = {
         releaseDate?: any | null;
         paymentDate?: any | null;
         imageUrl?: string | null;
-        score?: number | null;
+        score: number;
     }>;
 };
 
@@ -281,7 +285,7 @@ export type WishedFiguresQuery = {
     __typename?: 'Query';
     figures: Array<{
         __typename?: 'Figure';
-        id: number;
+        id: string;
         title: string;
         price: number;
         shop: string;
@@ -289,13 +293,13 @@ export type WishedFiguresQuery = {
         releaseDate?: any | null;
         paymentDate?: any | null;
         imageUrl?: string | null;
-        wishability?: number | null;
+        wishability: number;
     }>;
 };
 
 export const OrderedFiguresDocument = gql`
     query orderedFigures {
-        figures(status: "Ordered") {
+        figures(status: ORDERED) {
             id
             title
             price
@@ -304,6 +308,8 @@ export const OrderedFiguresDocument = gql`
             releaseDate
             paymentDate
             imageUrl
+            score
+            wishability
         }
     }
 `;
@@ -359,7 +365,7 @@ export type OrderedFiguresQueryResult = Apollo.QueryResult<
 >;
 export const OwnedFiguresDocument = gql`
     query ownedFigures {
-        figures(status: "Owned") {
+        figures(status: OWNED) {
             id
             title
             price
@@ -424,7 +430,7 @@ export type OwnedFiguresQueryResult = Apollo.QueryResult<
 >;
 export const WishedFiguresDocument = gql`
     query wishedFigures {
-        figures(status: "Wished") {
+        figures(status: WISHED) {
             id
             title
             price

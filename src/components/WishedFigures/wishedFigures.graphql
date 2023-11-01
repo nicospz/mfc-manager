@@ -1,5 +1,5 @@
 query wishedFigures {
-    figures(status: "Wished") {
+    figures(status: WISHED) {
         id
         title
         price

@@ -1,5 +1,5 @@
 query ownedFigures {
-    figures(status: "Owned") {
+    figures(status: OWNED) {
         id
         title
         price

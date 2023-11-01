@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { type RefresherService } from '@server/src/modules/refresher/refresher.service';
+import { RefresherService } from '@server/src/modules/refresher/refresher.service';
 
 @Controller('refresh')
 export class RefresherController {

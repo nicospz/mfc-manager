@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { type RefresherService } from '@server/src/modules/refresher/refresher.service';
+import { RefresherService } from '@server/src/modules/refresher/refresher.service';
 
 const REFRESH_INTERVAL_MINUTES = process.env.REFRESH_INTERVAL_MINUTES ?? 10;
 const REFRESH_IMAGES_INTERVAL_MINUTES =

@@ -3,29 +3,28 @@
 # ------------------------------------------------------
 
 type Query {
-    figures(status: String): [Figure!]!
+  figures(status: Status!): [Figure!]!
 }
 
 type Figure {
-    id: Float!
-    title: String!
-    price: Float!
-    shop: String!
-    status: Status!
-    imageUrl: String
-    releaseDate: DateTime
-    paymentDate: DateTime
-    score: Float
-    wishability: Float
+  id: ID!
+  title: String!
+  price: Float!
+  shop: String!
+  status: Status!
+  imageUrl: String
+  releaseDate: DateTime
+  paymentDate: DateTime
+  score: Float!
+  wishability: Float!
 }
 
-"""
-Status of the figure.
-"""
+"""Status of the figure."""
 enum Status {
-    ORDERED
-    OWNED
-    WISHED
+  ORDERED
+  OWNED
+  WISHED
+  DELETED
 }
 
 """
