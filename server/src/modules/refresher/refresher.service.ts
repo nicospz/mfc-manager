@@ -1,5 +1,7 @@
 import { createWriteStream, readdirSync, unlink } from 'fs';
-import fetch from 'node-fetch';
+import { Readable } from 'stream';
+import { finished } from 'stream/promises';
+import { ReadableStream } from 'node:stream/web';
 import { load } from 'cheerio';
 import { parse, Cookie as CookieType } from 'set-cookie-parser';
 import { v2 as cloudinary } from 'cloudinary';
@@ -108,11 +110,11 @@ export class RefresherService {
             }
 
             const fileStream = createWriteStream('./mfc-collection.csv');
-            await new Promise((resolve, reject) => {
-                response.body?.pipe(fileStream);
-                fileStream.on('finish', resolve);
-                fileStream.on('error', reject);
-            });
+            const body = response.body as ReadableStream;
+            if (!body) {
+                throw Error('No response body');
+            }
+            await finished(Readable.fromWeb(body).pipe(fileStream));
             // Converting CSV to JSON
             let jsonArray = [];
             const dir = readdirSync('./');
